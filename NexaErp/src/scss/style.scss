@@ -1,0 +1,302 @@
+@use "@coreui/coreui/scss/coreui" as * with ( 
+  $enable-deprecation-messages: false,
+);
+@use "@coreui/chartjs/scss/coreui-chartjs";
+@use "vendors/simplebar";
+
+body {
+  background-color: var(--cui-tertiary-bg);
+}
+/* =========================
+    GLOBAL UI COLOR UNIFICATION
+   ========================= */
+
+:root {
+  // Jo color aap chahte hain (e.g., Pure White ya Light Grey)
+  --my-custom-bg: #ffffff; 
+}
+
+// 1. Header ka background
+.header {
+  --cui-header-bg: var(--my-custom-bg) !important;
+  background-color: var(--my-custom-bg) !important;
+  border-bottom: 1px solid var(--cui-border-color-translucent);
+}
+
+// 2. Footer ka background
+.footer {
+  --cui-footer-bg: var(--my-custom-bg) !important;
+  background-color: var(--my-custom-bg) !important;
+}
+
+// 3. Card aur Card Body ka background
+.card {
+  --cui-card-bg: var(--my-custom-bg) !important;
+  background-color: var(--my-custom-bg) !important;
+  border: 1px solid var(--cui-border-color-translucent);
+  
+  .card-header, .card-body, .card-footer {
+    background-color: transparent !important; // Taake card ka main bg hi nazar aaye
+  }
+}
+/* =============================================================
+   ULTRA-MODERN GREY THEME (EXACT MATCH)
+   ============================================================= */
+
+.modern-grey-modal {
+  .modal-content {
+    // Body ka wahi color jo backdrop ka hota hai
+    background-color: #f8f9fa !important; 
+    border-radius: 16px !important;
+    border: 1px solid rgba(0,0,0,0.05) !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+  }
+
+  .modal-header {
+    border: none !important;
+    padding: 2rem 2rem 0 !important;
+    .modal-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #3c4b64;
+    }
+  }
+
+  .modal-body {
+    padding: 2rem !important;
+  }
+
+  // Inputs ko background ke sath blend karne ke liye logic
+  .form-control, .form-select {
+    background-color: rgba(255, 255, 255, 0.6) !important; // Halka transparent white
+    border: 1.5px solid #e0e2e6 !important;
+    color: #3c4b64 !important;
+    height: calc(3rem + 2px); // Thora bulky aur modern height
+    
+    &::placeholder {
+      color: #a1a1a1 !important;
+    }
+
+    // Hover par bilkul minor change
+    &:hover {
+      border-color: #d1d4d7 !important;
+    }
+
+    // Focus state: 
+    &:focus {
+      background-color: #ffffff !important; 
+      border-color: #6f42c1 !important;
+      box-shadow: 0 0 0 4px rgba(111, 66, 193, 0.1) !important;
+    }
+  }
+
+  // Labels ko subtle rakhein
+  .form-label {
+    color: #636f83 !important;
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+  }
+
+  .modal-footer {
+    border: none !important;
+    padding: 0 2rem 2rem !important;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+}
+
+// Global button tweak for Dubai Style (Rounded & Shadow)
+.btn-primary {
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  padding: 0.6rem 1.5rem !important;
+  box-shadow: 0 4px 6px rgba(111, 66, 193, 0.2) !important;
+}
+/* TABLE MODERNIZATION (ROLE STYLE) */
+
+.modern-card {
+  border-radius: 12px !important;
+  overflow: hidden;
+}
+
+.action-icon {
+  width: 18px;
+  height: 18px;
+  opacity: 0.7;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+
+// Table row hover change subtle background change
+.table-hover tbody tr:hover {
+  background-color: rgba(111, 66, 193, 0.03) !important;
+}
+
+// Avatar circle style
+.avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+// Custom badge styles (Soft look)
+.badge-soft-success {
+  background-color: #e6fcf5 !important;
+  color: #0ca678 !important;
+}
+
+.badge-soft-danger {
+  background-color: #fff5f5 !important;
+  color: #fa5252 !important;
+}
+/* =============================================================
+   COMPANY SETTINGS MODERN UI
+   ============================================================= */
+
+.modern-settings-card {
+  border-radius: 16px !important;
+  overflow: hidden;
+
+  .custom-settings-nav {
+    .nav-link {
+      color: #636f83;
+      font-weight: 600;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      background: transparent;
+
+      &.active {
+        background-color: #6f42c1 !important; // Your purple brand color
+        color: white !important;
+        box-shadow: 0 4px 12px rgba(111, 66, 193, 0.2);
+      }
+
+      &:hover:not(.active) {
+        background-color: rgba(111, 66, 193, 0.05);
+        color: #6f42c1;
+      }
+    }
+  }
+
+  // Inputs within settings should be clean
+  .form-control {
+    background-color: #f8f9fa;
+    border: 1.5px solid #eceef1;
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+
+    &:focus {
+      background-color: #ffffff;
+      border-color: #6f42c1;
+      box-shadow: 0 0 0 4px rgba(111, 66, 193, 0.1);
+    }
+  }
+
+  .form-label {
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: #4f5d73;
+    margin-bottom: 8px;
+  }
+}
+// 4. Page background (jis par card show ho raha hai)
+body {
+  background-color: var(--my-custom-bg) !important;
+}
+.wrapper {
+  width: 100%;
+  padding-inline: var(--cui-sidebar-occupy-start, 0) var(--cui-sidebar-occupy-end, 0);
+  will-change: auto;
+  @include transition(padding .15s);
+}
+
+.header > .container-fluid,
+.sidebar-header {
+  min-height: calc(4rem + 1px); // stylelint-disable-line function-disallowed-list
+}
+
+.sidebar-brand-full {
+  margin-left: 3px;
+}
+
+.sidebar-header {
+  .nav-underline-border {
+    --cui-nav-underline-border-link-padding-x: 1rem;
+    --cui-nav-underline-border-gap: 0;
+  }
+
+  .nav-link {
+    display: flex;
+    align-items: center;
+    min-height: calc(4rem + 1px); // stylelint-disable-line function-disallowed-list
+  }
+}
+
+.sidebar-toggler {
+  margin-inline-start: auto;
+}
+
+.sidebar-narrow,
+.sidebar-narrow-unfoldable:not(:hover) {
+  .sidebar-toggler {
+    margin-inline-end: auto;
+  }
+}
+
+.header > .container-fluid + .container-fluid {
+  min-height: 3rem;
+}
+
+.footer {
+  min-height: calc(3rem + 1px); // stylelint-disable-line function-disallowed-list
+}
+/* =========================
+   ERP TABLE (COMPACT STYLE)
+========================= */
+
+.erp-table {
+  --cui-table-bg: #fff;
+  border-collapse: collapse !important;
+  font-size: 13px;
+}
+
+/* HEADER */
+.erp-table thead th {
+  padding: 6px 10px !important;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--cui-secondary-color);
+  border-bottom: 1px solid var(--cui-border-color);
+  height: 36px;
+}
+
+/* BODY CELLS */
+.erp-table tbody td {
+  padding: 6px 10px !important;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--cui-border-color-translucent);
+  height: 36px;
+}
+
+/* ROW HOVER */
+.erp-table tbody tr:hover {
+  background-color: var(--cui-tertiary-bg);
+  transition: 0.15s ease;
+}
+@include color-mode(dark) {
+  body {
+    background-color: var(--cui-dark-bg-subtle);
+  }
+
+  .footer {
+    --cui-footer-bg: var(--cui-body-bg);
+  }
+}

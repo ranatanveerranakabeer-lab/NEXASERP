@@ -76,7 +76,7 @@ function* watchSaveProfile() {
 }
 
 function* watchGetCompany() {
-  yield takeLatest(getCompany.type, watchGetCompany)
+  yield takeLatest(getCompany.type, getCompanyWorker)
 }
 
 function* watchSaveCompany() {

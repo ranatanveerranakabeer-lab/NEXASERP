@@ -20,12 +20,15 @@ import { getProfile, getCompany, saveCompany, saveProfile } from '../../redux/sl
 import AppButton from '../../components/common/AppButton'
 
 const CompanySetting = () => {
-  const BASE_URL = 'https://localhost:7116'
-  const [activeKey, setActiveKey] = useState(1)
-  const fileInputRef = useRef(null)
   const dispatch = useDispatch()
 
   const { company, profile, isLoading } = useSelector((state) => state.companies)
+
+  const fileInputRef = useRef(null)
+
+  const [activeKey, setActiveKey] = useState(1)
+
+  const BASE_URL = 'https://localhost:7016'
 
   const [profileData, setProfileData] = useState({
     id: 0,
@@ -34,6 +37,7 @@ const CompanySetting = () => {
     phoneNumber: '',
     profilePictureUrl: '',
     imageFile: null,
+    companyId: 0,
   })
 
   const [companyData, setCompanyData] = useState({
@@ -49,10 +53,12 @@ const CompanySetting = () => {
     const userStr = localStorage.getItem('user')
     if (userStr) {
       const currentUser = JSON.parse(userStr)
+
       const uid = currentUser?.userId || currentUser?.id
-      const tid = currentUser?.tenantId || currentUser?.companyId
+      const companyId = currentUser?.companyId
+
       if (uid) dispatch(getProfile(uid))
-      if (tid) dispatch(getCompany(tid))
+      if (companyId) dispatch(getCompany(companyId))
     }
   }, [dispatch])
 
@@ -66,6 +72,7 @@ const CompanySetting = () => {
         email: profile.email || profile.Email || '',
         phoneNumber: profile.phoneNumber || profile.PhoneNumber || '',
         profilePictureUrl: profile.profilePictureUrl || profile.ProfilePictureUrl || '',
+        companyId: profile.companyId || profile.CompanyId || 0,
       }))
     }
   }, [profile])
@@ -84,7 +91,7 @@ const CompanySetting = () => {
     }
   }, [company])
 
-  // --- MEMOIZED IMAGE URL (Loop Rokne Ke Liye) ---
+  // Avatar
   const avatarImage = useMemo(() => {
     if (profileData.imageFile) {
       return URL.createObjectURL(profileData.imageFile)
@@ -100,11 +107,19 @@ const CompanySetting = () => {
 
   const onUpdateProfile = () => {
     const formData = new FormData()
-    formData.append('ID', profileData.id)
+
+    formData.append('Id', profileData.id)
     formData.append('Name', profileData.name)
     formData.append('Email', profileData.email)
     formData.append('PhoneNumber', profileData.phoneNumber || '')
-    if (profileData.imageFile) formData.append('ProfileImage', profileData.imageFile)
+    formData.append('EmployeeId', profileData.employeeId || 0)
+    formData.append('CompanyId', profileData.companyId)
+    formData.append('WebsiteUrl', profileData.websiteUrl || '')
+
+    if (profileData.imageFile) {
+      formData.append('ProfileImage', profileData.imageFile) // 👈 Matches UserRequestDto
+    }
+
     dispatch(saveProfile(formData))
   }
 
@@ -123,9 +138,11 @@ const CompanySetting = () => {
   return (
     <CContainer fluid className="px-4 mt-2">
       <h4 className="fw-bold mb-4">Settings</h4>
+
       <CCard className="border-0 shadow-sm overflow-hidden">
         <CCardBody className="p-0">
           <CRow className="g-0" style={{ minHeight: '500px' }}>
+            {/* LEFT SIDE */}
             <CCol md={3} className="border-end bg-light p-4 text-center">
               <CAvatar
                 src={avatarImage}
@@ -135,11 +152,10 @@ const CompanySetting = () => {
                   height: '120px',
                   objectFit: 'cover',
                   cursor: 'pointer',
-                  border: '3px solid white',
                 }}
-                className="shadow-sm mb-3"
                 onClick={() => fileInputRef.current.click()}
               />
+
               <input
                 type="file"
                 ref={fileInputRef}
@@ -147,47 +163,50 @@ const CompanySetting = () => {
                 accept="image/*"
                 onChange={(e) => {
                   if (e.target.files[0]) {
-                    setProfileData({ ...profileData, imageFile: e.target.files[0] })
+                    setProfileData({
+                      ...profileData,
+                      imageFile: e.target.files[0],
+                    })
                   }
                 }}
               />
-              <h6 className="fw-bold">{profileData.name || 'User'}</h6>
+
+              <h6 className="fw-bold mt-3">{profileData.name || 'User'}</h6>
 
               <CNav variant="pills" className="flex-column gap-2 text-start mt-4">
                 <CNavItem>
-                  <CNavLink role="button" active={activeKey === 1} onClick={() => setActiveKey(1)}>
+                  <CNavLink active={activeKey === 1} onClick={() => setActiveKey(1)}>
                     Profile
                   </CNavLink>
                 </CNavItem>
                 <CNavItem>
-                  <CNavLink role="button" active={activeKey === 2} onClick={() => setActiveKey(2)}>
+                  <CNavLink active={activeKey === 2} onClick={() => setActiveKey(2)}>
                     Company
                   </CNavLink>
                 </CNavItem>
               </CNav>
             </CCol>
 
-            <CCol md={9} className="p-4 p-md-5 bg-white">
+            {/* RIGHT SIDE */}
+            <CCol md={9} className="p-4">
               {isLoading ? (
                 <div className="text-center py-5">
-                  <CSpinner color="primary" />
+                  <CSpinner />
                 </div>
               ) : (
                 <CTabContent>
+                  {/* PROFILE */}
                   <CTabPane visible={activeKey === 1}>
-                    <div className="d-flex justify-content-between mb-4">
-                      <h5 className="fw-bold m-0">Personal Profile</h5>
-                      <AppButton onClick={onUpdateProfile}>Update Profile</AppButton>
-                    </div>
+                    <h5>Profile</h5>
+                    <AppButton onClick={onUpdateProfile}>Update</AppButton>
+
                     <CForm>
                       <CFormInput
-                        className="mb-3"
                         label="Name"
                         value={profileData.name}
                         onChange={(e) => setProfileData({ ...profileData, name: e.target.value })}
                       />
                       <CFormInput
-                        className="mb-3"
                         label="Email"
                         value={profileData.email}
                         onChange={(e) => setProfileData({ ...profileData, email: e.target.value })}
@@ -195,14 +214,13 @@ const CompanySetting = () => {
                     </CForm>
                   </CTabPane>
 
+                  {/* COMPANY */}
                   <CTabPane visible={activeKey === 2}>
-                    <div className="d-flex justify-content-between mb-4">
-                      <h5 className="fw-bold m-0">Company Details</h5>
-                      <AppButton onClick={onUpdateCompany}>Save Company Changes</AppButton>
-                    </div>
+                    <h5>Company</h5>
+                    <AppButton onClick={onUpdateCompany}>Save</AppButton>
+
                     <CForm>
                       <CFormInput
-                        className="mb-3"
                         label="Company Name"
                         value={companyData.companyName}
                         onChange={(e) =>
@@ -210,7 +228,6 @@ const CompanySetting = () => {
                         }
                       />
                       <CFormInput
-                        className="mb-3"
                         label="Address"
                         value={companyData.address}
                         onChange={(e) =>
@@ -218,7 +235,6 @@ const CompanySetting = () => {
                         }
                       />
                       <CFormInput
-                        className="mb-3"
                         label="Phone"
                         value={companyData.phone}
                         onChange={(e) => setCompanyData({ ...companyData, phone: e.target.value })}

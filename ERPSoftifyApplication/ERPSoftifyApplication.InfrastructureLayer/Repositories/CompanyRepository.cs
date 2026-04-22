@@ -24,82 +24,40 @@ namespace ERPSoftifyApplication.InfrastructureLayer.Repositories
                 .FirstOrDefaultAsync(cancellationToken);
         }
 
-        public async Task<User> SaveOrUpdateUserProfileAsync(
-    User user,
-    byte[]? profileImageBytes,
-    string? profileImageFileName,
-    CancellationToken cancellationToken)
+        public async Task<User> SaveOrUpdateUserProfileAsync(User user, byte[]? profileImageBytes, string? profileImageFileName, CancellationToken cancellationToken)
         {
             var existing = await _context.Users
                 .FirstOrDefaultAsync(u => u.ID == user.ID, cancellationToken);
 
-            var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "profile");
+            if (existing == null) throw new Exception("User not found");
+            existing.Name = user.Name;
+            existing.Email = user.Email;
+            existing.PhoneNumber = user.PhoneNumber;
+            existing.WebsiteUrl = user.WebsiteUrl;
+            existing.UpdatedAt = DateTime.UtcNow;
 
-            if (!Directory.Exists(folderPath))
+            if (profileImageBytes != null && profileImageBytes.Length > 0)
             {
-                Directory.CreateDirectory(folderPath);
-            }
+                var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "profile");
+                if (!Directory.Exists(folderPath)) Directory.CreateDirectory(folderPath);
 
-            string? imageUrl = null;
-
-            if (profileImageBytes != null && profileImageFileName != null)
-            {
-                var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(profileImageFileName);
-
+                var uniqueFileName = $"{Guid.NewGuid()}{Path.GetExtension(profileImageFileName)}";
                 var filePath = Path.Combine(folderPath, uniqueFileName);
 
                 await File.WriteAllBytesAsync(filePath, profileImageBytes, cancellationToken);
 
-                imageUrl = $"/uploads/profile/{uniqueFileName}";
-            }
-
-            if (existing == null)
-            {
-                if (imageUrl != null)
+                if (!string.IsNullOrEmpty(existing.ProfilePictureUrl))
                 {
-                    user.ProfilePictureUrl = imageUrl;
+                    var oldPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", existing.ProfilePictureUrl.TrimStart('/'));
+                    if (File.Exists(oldPath)) try { File.Delete(oldPath); } catch { }
                 }
 
-                _context.Users.Add(user);
-
-                await _context.SaveChangesAsync(cancellationToken);
-
-                return user;
+                existing.ProfilePictureUrl = $"/uploads/profile/{uniqueFileName}";
             }
-            else
-            {
-                existing.Name = user.Name;
-                existing.Email = user.Email;
-                existing.PhoneNumber = user.PhoneNumber;
-                
-                existing.EmployeeId = user.EmployeeId;
-                existing.CompanyId = user.CompanyId;
-                existing.UpdatedAt = DateTime.UtcNow;
 
-                if (imageUrl != null)
-                {
-                    if (!string.IsNullOrEmpty(existing.ProfilePictureUrl))
-                    {
-                        var oldImagePath = Path.Combine(
-                            Directory.GetCurrentDirectory(),
-                            "wwwroot",
-                            existing.ProfilePictureUrl.TrimStart('/'));
-
-                        if (File.Exists(oldImagePath))
-                        {
-                            File.Delete(oldImagePath);
-                        }
-                    }
-
-                    existing.ProfilePictureUrl = imageUrl;
-                }
-
-                await _context.SaveChangesAsync(cancellationToken);
-
-                return existing;
-            }
+            await _context.SaveChangesAsync(cancellationToken);
+            return existing;
         }
-        // ----- COMPANY SETTING -----
         public async Task<CompanySetting> GetCompanySettingAsync(int companyId, CancellationToken cancellationToken)
         {
             return await _context.CompanySettings

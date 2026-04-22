@@ -166,7 +166,7 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "ID": {
+                  "Id": {
                     "type": "integer",
                     "format": "int32"
                   },
@@ -177,9 +177,6 @@
                     "type": "string"
                   },
                   "PhoneNumber": {
-                    "type": "string"
-                  },
-                  "Department": {
                     "type": "string"
                   },
                   "EmployeeId": {
@@ -200,7 +197,7 @@
                 }
               },
               "encoding": {
-                "ID": {
+                "Id": {
                   "style": "form"
                 },
                 "Name": {
@@ -210,9 +207,6 @@
                   "style": "form"
                 },
                 "PhoneNumber": {
-                  "style": "form"
-                },
-                "Department": {
                   "style": "form"
                 },
                 "EmployeeId": {

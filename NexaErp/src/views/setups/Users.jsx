@@ -26,6 +26,7 @@ import {
 import { getAllTenants } from '../../redux/slice/tenantSlice'
 import { getAllBranches } from '../../redux/slice/branchSlice'
 import { getAllRoles } from '../../redux/slice/roleSlice'
+import { getCompany } from '../../redux/slice/companySlice'
 function Users() {
   const dispatch = useDispatch()
   // Users.jsx
@@ -33,6 +34,8 @@ function Users() {
   const usersData = useSelector((state) => state.users?.result)
   const roles = useSelector((state) => state.roles?.result || [])
   const branches = useSelector((state) => state.branches?.result || [])
+  const company = useSelector((state) => state.companies?.result || null)
+  const tenants = useSelector((state) => state.tenants?.result || [])
   const users = usersData || [] // Default empty array bahar rakhein
 
   const [visible, setVisible] = useState(false)
@@ -43,6 +46,8 @@ function Users() {
     dispatch(getAllUsers())
     dispatch(getAllRoles())
     dispatch(getAllBranches())
+    dispatch(getAllTenants())
+    dispatch(getCompany())
   }, [dispatch])
 
   const handleSave = () => {
@@ -134,6 +139,8 @@ function Users() {
         handleSave={handleSave}
         roles={roles}
         branches={branches}
+        companies={company}
+        tenants={tenants}
       />
     </CRow>
   )

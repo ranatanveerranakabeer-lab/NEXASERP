@@ -119,7 +119,7 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "ID",
+        "Name": "Id",
         "Type": "System.Int32",
         "IsRequired": false
       },
@@ -135,11 +135,6 @@
       },
       {
         "Name": "PhoneNumber",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "Department",
         "Type": "System.String",
         "IsRequired": false
       },

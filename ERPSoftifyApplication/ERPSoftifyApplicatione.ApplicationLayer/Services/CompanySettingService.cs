@@ -34,23 +34,17 @@ namespace ERPSoftifyApplicatione.ApplicationLayer.Services
                 Name = user.Name,
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
-                EmployeeId = user.EmployeeId,
                 WebsiteUrl = user.WebsiteUrl,
                 ProfilePictureUrl = user.ProfilePictureUrl,
-                CompanyId = user.CompanyId,
-                RoleId = user.RoleId,
-                TenantId = user.TenantId,
-                BranchId = user.BranchId,
-                IsActive = user.IsActive
             };
         }
 
-        public async Task<UserProfileDto> SaveOrUpdateUserProfileAsync(UserProfileDto dto,IFormFile? profileImage, CancellationToken cancellationToken)
+        public async Task<UserProfileDto> SaveOrUpdateUserProfileAsync(UserProfileDto dto, IFormFile? profileImage, CancellationToken cancellationToken)
         {
             byte[]? imageBytes = null;
             string? fileName = null;
 
-            if (profileImage != null)
+            if (profileImage != null && profileImage.Length > 0)
             {
                 using var ms = new MemoryStream();
                 await profileImage.CopyToAsync(ms, cancellationToken);
@@ -58,44 +52,29 @@ namespace ERPSoftifyApplicatione.ApplicationLayer.Services
                 fileName = profileImage.FileName;
             }
 
-            // 🔥 Convert DTO → Entity
+            // Mapping: DTO -> Entity (Sirf update honay wali fields)
             var entity = new User
             {
                 ID = dto.Id,
                 Name = dto.Name,
                 Email = dto.Email,
                 PhoneNumber = dto.PhoneNumber,
-                EmployeeId = dto.EmployeeId,
                 WebsiteUrl = dto.WebsiteUrl,
-                CompanyId = dto.CompanyId,
-                RoleId = dto.RoleId,
-                TenantId = dto.TenantId,
-                BranchId = dto.BranchId,
-                IsActive = dto.IsActive
             };
 
-            // Call repository (Entity only)
-            var savedUser = await _repository
-                .SaveOrUpdateUserProfileAsync(entity, imageBytes, fileName, cancellationToken);
+            var savedUser = await _repository.SaveOrUpdateUserProfileAsync(entity, imageBytes, fileName, cancellationToken);
 
-            // 🔥 Convert Entity → DTO
+            // Mapping: Entity -> DTO (Wapsi ka data)
             return new UserProfileDto
             {
                 Id = savedUser.ID,
                 Name = savedUser.Name,
                 Email = savedUser.Email,
                 PhoneNumber = savedUser.PhoneNumber,
-                EmployeeId = savedUser.EmployeeId,
-                WebsiteUrl = savedUser.WebsiteUrl,
                 ProfilePictureUrl = savedUser.ProfilePictureUrl,
-                CompanyId = savedUser.CompanyId,
-                RoleId = savedUser.RoleId,
-                TenantId = savedUser.TenantId,
-                BranchId = savedUser.BranchId,
-                IsActive = savedUser.IsActive
+                WebsiteUrl = savedUser.WebsiteUrl
             };
         }
-
         // ================== COMPANY ==================
         public async Task<CompanySetting> GetCompanySettingAsync(int companyId, CancellationToken cancellationToken)
         {

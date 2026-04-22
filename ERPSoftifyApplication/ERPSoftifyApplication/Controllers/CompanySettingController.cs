@@ -45,24 +45,18 @@ namespace ERPSoftifyApplication.Controllers
         }
 
         [HttpPost("profile")]
-        public async Task<IActionResult> SaveOrUpdateProfile( [FromForm] UserRequestDto request, CancellationToken cancellationToken)
+        public async Task<IActionResult> SaveOrUpdateProfile([FromForm] UserRequestDto request, CancellationToken cancellationToken)
         {
-            var user = new UserProfileDto
+            var userDto = new UserProfileDto
             {
-                Id = request.ID,
+                Id = request.Id,
                 Name = request.Name,
-                PhoneNumber = request.PhoneNumber,
                 Email = request.Email,
-                Department = request.Department,
-                EmployeeId = request.EmployeeId,
-                CompanyId = request.CompanyId,
+                PhoneNumber = request.PhoneNumber,
                 WebsiteUrl = request.WebsiteUrl,
-                
             };
 
-            var result = await _settingService
-                .SaveOrUpdateUserProfileAsync(user, request.ProfileImage, cancellationToken);
-
+            var result = await _settingService.SaveOrUpdateUserProfileAsync(userDto, request.ProfileImage, cancellationToken);
             return Ok(result);
         }
 

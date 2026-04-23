@@ -8,7 +8,7 @@ namespace ERPSoftifyApplicatione.ApplicationLayer.DTO.PermissionsDto
 {
     public class PermissionDto
     {
-        public int Id { get; set; }  // For update/edit
+        public int Id { get; set; } 
         public string PermissionName { get; set; } = null!;
         public string? Description { get; set; }
         public int TenantId { get; set; }

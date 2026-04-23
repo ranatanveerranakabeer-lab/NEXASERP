@@ -5,6 +5,7 @@ import uiReducer from './sidebarSlice'
 import branchReducer from './branchSlice'
 import roleReducer from './roleSlice'
 import companyReducer from './companySlice'
+import permissionReducer from './permissionSlice'
 
 const rootReducer = combineReducers({
   tenants: tenantReducer,
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
   branches: branchReducer,
   roles: roleReducer,
   companies: companyReducer,
+  permissions: permissionReducer,
 })
 
 export default rootReducer

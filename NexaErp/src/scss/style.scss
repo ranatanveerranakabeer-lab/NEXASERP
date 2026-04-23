@@ -207,6 +207,73 @@ body {
     margin-bottom: 8px;
   }
 }
+
+// Roles.scss
+.permissions-modal {
+  .modal-header {
+    border-bottom: 1px solid #ebedef;
+    .btn-close { margin: 0; }
+  }
+
+  .nav-tabs {
+    border-bottom: 1px solid #ebedef;
+    .nav-link {
+      color: #666;
+      &.active {
+        color: #000;
+        border-bottom: 2px solid #802060; // Bordole line
+      }
+    }
+  }
+
+  .permissions-container {
+    padding: 20px;
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+
+  .permissions-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); // 3 columns as per image
+    gap: 10px 20px;
+  }
+
+  .form-check {
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    
+    .form-check-input {
+      border: 1px solid #ccc;
+      cursor: pointer;
+      
+      &:checked {
+        background-color: #802060; // Bordole color
+        border-color: #802060;
+      }
+    }
+
+    .form-check-label {
+      font-size: 0.85rem;
+      color: #444;
+      margin-left: 8px;
+      cursor: pointer;
+    }
+  }
+
+  .btn-save-custom {
+    background-color: #802060; // Bordole button
+    color: white;
+    border: none;
+    border-radius: 20px; // Rounded buttons like image
+    padding: 6px 25px;
+    
+    &:hover {
+      background-color: #6a1a4f;
+      color: white;
+    }
+  }
+}
 // 4. Page background (jis par card show ho raha hai)
 body {
   background-color: var(--my-custom-bg) !important;

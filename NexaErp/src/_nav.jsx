@@ -12,7 +12,7 @@
 
 import React from 'react'
 import CIcon from '@coreui/icons-react'
-import { cilUser } from '@coreui/icons'
+import { cilSettings, cilUser } from '@coreui/icons'
 import {
   cilBell,
   cilCalculator,
@@ -125,18 +125,22 @@ const _nav = [
         name: 'Branch',
         to: '/setups/branch',
       },
-      {
-        component: CNavItem,
-        name: 'CompanySetting',
-        to: '/setups/companySetting',
-      },
     ],
   },
+  // Theme section se pehle ya jahan aap munasib samjhein
+
   {
     component: CNavTitle,
     name: 'Theme',
   },
 
+  // src/_nav.js
+  {
+    component: CNavItem,
+    name: 'Permission Settings',
+    to: '/permission-settings', // Route path se match karein
+    icon: <CIcon icon={cilSettings} customClassName="nav-icon" />,
+  },
   {
     component: CNavItem,
     name: 'Colors',

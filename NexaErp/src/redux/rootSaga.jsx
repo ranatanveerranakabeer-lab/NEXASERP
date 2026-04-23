@@ -4,6 +4,14 @@ import { userSaga } from './saga/userSaga'
 import { branchSaga } from './saga/branchSaga'
 import { roleSaga } from './saga/roleSaga'
 import { companySaga } from './saga/companySaga'
+import { permissionSaga } from './saga/permissionSaga'
 export default function* rootSaga() {
-  yield all([fork(tenantSaga), fork(userSaga), fork(branchSaga), fork(roleSaga), fork(companySaga)])
+  yield all([
+    fork(tenantSaga),
+    fork(userSaga),
+    fork(branchSaga),
+    fork(roleSaga),
+    fork(companySaga),
+    fork(permissionSaga),
+  ])
 }

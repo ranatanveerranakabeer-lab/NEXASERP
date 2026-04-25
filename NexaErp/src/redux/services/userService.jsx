@@ -20,7 +20,7 @@ const userService = {
   },
 
   update: async (payload) => {
-    const res = await apiClient.put(API_ENDPOINTS.USERS.UPDATE(payload.id), payload)
+    const res = await apiClient.put(API_ENDPOINTS.USERS.UPDATE(payload.Id), payload)
     return res?.data
   },
   delete: async (id) => {

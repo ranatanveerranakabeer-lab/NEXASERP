@@ -1,5 +1,7 @@
-﻿using ERPSoftifyApplication.DomainLayer.Entities;
+﻿using ERPSoftifyApplication.DomainLayer;
+using ERPSoftifyApplication.DomainLayer.Entities;
 using ERPSoftifyApplication.DomainLayer.Interface;
+using ERPSoftifyApplicatione.ApplicationLayer.DTO.PermissionsDto;
 using ERPSoftifyApplicatione.ApplicationLayer.DTO.User;
 using ERPSoftifyApplicatione.ApplicationLayer.Interface;
 using Microsoft.AspNetCore.Http;
@@ -84,6 +86,13 @@ namespace ERPSoftifyApplicatione.ApplicationLayer.Services
         public async Task<CompanySetting> SaveOrUpdateCompanySettingAsync(CompanySetting company, CancellationToken cancellationToken)
         {
             return await _repository.SaveOrUpdateCompanySettingAsync(company, cancellationToken);
+        }
+
+       
+        public async Task<ResponseDataModel<List<CompanySetting>>> GetAllCompanyAsync(CancellationToken cancellationToken)
+        {
+            var result = await _repository.GetAllAsync(cancellationToken);
+            return ResponseDataModel<List<CompanySetting>>.SuccessResponse(result);
         }
     }
 }

@@ -12,7 +12,7 @@ import {
   CTableRow,
   CBadge,
 } from '@coreui/react'
-
+import { useToast } from '../../components/common/ToastContext'
 import TableHeader from '../../components/common/TableHeader'
 import UserAddEditModal from '../UserAddEditModal'
 import AppButton from '../../components/common/AppButton'
@@ -21,25 +21,28 @@ import {
   createUser,
   updateUser,
   deleteUser,
-  setUser,
 } from '../../redux/slice/userSlice'
 import { getAllTenants } from '../../redux/slice/tenantSlice'
 import { getAllBranches } from '../../redux/slice/branchSlice'
 import { getAllRoles } from '../../redux/slice/roleSlice'
-import { getCompany } from '../../redux/slice/companySlice'
+import { getAllCompany } from '../../redux/slice/companySlice'
+import { useAppLanguage } from "../../components/common/LanguageContext";
 function Users() {
   const dispatch = useDispatch()
-  // Users.jsx
-  // Users.jsx Line 24 ke aas pass replace karein
+  const { addToast } = useToast()
+  const { l} = useAppLanguage() // 2. Initialize translation
+
+  // Selectors
   const usersData = useSelector((state) => state.users?.result)
   const roles = useSelector((state) => state.roles?.result || [])
   const branches = useSelector((state) => state.branches?.result || [])
-  const company = useSelector((state) => state.companies?.result || null)
+  const allCompanies = useSelector((state) => state.companies?.companies || [])
   const tenants = useSelector((state) => state.tenants?.result || [])
-  const users = usersData || [] // Default empty array bahar rakhein
+  const users = usersData || []
 
+  // States
   const [visible, setVisible] = useState(false)
-  const [activeColumn, setActiveColumn] = useState('')
+  const [activeColumn, setActiveColumn] = useState('User Name')
   const [form, setForm] = useState({ id: 0, name: '' })
 
   useEffect(() => {
@@ -47,20 +50,29 @@ function Users() {
     dispatch(getAllRoles())
     dispatch(getAllBranches())
     dispatch(getAllTenants())
-    dispatch(getCompany())
+    dispatch(getAllCompany())
   }, [dispatch])
 
-  const handleSave = () => {
-    if (!form.name) return
+  const handleSave = (payload) => {
+    if (!payload.Name) return
 
-    if (form.id === 0) {
-      dispatch(createUser(form))
+    if (payload.Id === 0) {
+      dispatch(createUser(payload))
+      addToast('Success', 'User created!', 'success')
     } else {
-      dispatch(updateUser(form))
+      dispatch(updateUser(payload))
+      addToast('Success', 'User Updated!', 'success')
     }
 
     setVisible(false)
     setForm({ id: 0, name: '' })
+  }
+
+  const handleDelete = (id) => {
+    if (window.confirm('Are you sure you want to delete this user?')) {
+      dispatch(deleteUser(id))
+      addToast('Deleted', 'User has been removed successfully.', 'error')
+    }
   }
 
   return (
@@ -70,37 +82,39 @@ function Users() {
           <CCardBody>
             <div className="d-flex justify-content-between align-items-center mb-3">
               <div>
-                <h4 className="mb-1">Users</h4>
-                {/* Export Button Header ke nichy */}
+                {/* 3. Title Translation */}
+                <h4 className="mb-1">{l('user_management')}</h4> 
                 <AppButton variant="golden" data={users} fileName="Users_Report" size="sm">
-                  download xls
+                  {l('download_xls', { defaultValue: 'download xls' })}
                 </AppButton>
               </div>
-
-              <AppButton onClick={() => setVisible(true)}>Add User</AppButton>
+              <AppButton onClick={() => setVisible(true)}>{l('add_new')}</AppButton>
             </div>
 
             <CTable responsive>
               <CTableHead>
                 <CTableRow>
-                  <TableHeader col="User Name" />
-                  <TableHeader col="Email" />
-                  <TableHeader col="Phone" />
-                  <TableHeader col="Status" />
-                  <TableHeader col="Action" />
+
+
+                  <TableHeader col={l('user name')} activeColumn={activeColumn} setActiveColumn={setActiveColumn} />
+                  <TableHeader col={l('email')} activeColumn={activeColumn} setActiveColumn={setActiveColumn} />
+                  <TableHeader col={l('phone')} activeColumn={activeColumn} setActiveColumn={setActiveColumn} />
+                  <TableHeader col={l('status')} activeColumn={activeColumn} setActiveColumn={setActiveColumn} />
+                  <TableHeader col={l('action')} activeColumn={activeColumn} setActiveColumn={setActiveColumn} />
+                  
                 </CTableRow>
               </CTableHead>
 
               <CTableBody>
                 {users?.map((u) => (
                   <CTableRow key={u.id}>
-                    {/* Data Binding as per your image */}
-                    <CTableDataCell>{u.name}</CTableDataCell>
-                    <CTableDataCell>{u.email}</CTableDataCell>
+                    <CTableDataCell>{l(u.name)}</CTableDataCell>
+                   <CTableDataCell>{l(u.email)}</CTableDataCell>
                     <CTableDataCell>{u.phoneNumber}</CTableDataCell>
                     <CTableDataCell>
+                      {/* 4. Badge Status Translation */}
                       <CBadge color={u.status === 'Active' ? 'success' : 'danger'}>
-                        {u.status}
+                        {u.status === 'Active' ? l('active') : l('inactive')}
                       </CBadge>
                     </CTableDataCell>
 
@@ -108,19 +122,25 @@ function Users() {
                       <AppButton
                         size="sm"
                         onClick={() => {
-                          setForm(u) // u is correct now
+                          setForm({
+                            ...u,
+                            companyId: u.companyId ? Number(u.companyId) : '',
+                            branchId: u.branchId ? Number(u.branchId) : '',
+                            tenantId: u.tenantId ? Number(u.tenantId) : '',
+                            roleId: u.roleId ? Number(u.roleId) : '',
+                          })
                           setVisible(true)
                         }}
                       >
-                        Edit
+                        {l('edit')}
                       </AppButton>
                       <AppButton
                         size="sm"
                         color="danger"
                         className="ms-1"
-                        onClick={() => dispatch(deleteUser(u.id))}
+                        onClick={() => handleDelete(u.id)}
                       >
-                        Delete
+                        {l('delete')}
                       </AppButton>
                     </CTableDataCell>
                   </CTableRow>
@@ -139,7 +159,7 @@ function Users() {
         handleSave={handleSave}
         roles={roles}
         branches={branches}
-        companies={company}
+        companies={allCompanies}
         tenants={tenants}
       />
     </CRow>

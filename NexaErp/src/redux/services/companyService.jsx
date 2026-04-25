@@ -8,7 +8,10 @@ const companyService = {
     const res = await apiClient.get(API_ENDPOINTS.SETTINGS.COMPANY.GET_BY_COMPANY_ID(companyId))
     return res?.data?.data || res?.data
   },
-
+  getAll: async () => {
+    const res = await apiClient.get(API_ENDPOINTS.SETTINGS.COMPANY.GET_ALL)
+    return res?.data?.data || res?.data || []
+  },
   saveOrUpdateCompany: async (payload) => {
     const res = await apiClient.post(API_ENDPOINTS.SETTINGS.COMPANY.SAVE_OR_UPDATE, payload)
     return res?.data

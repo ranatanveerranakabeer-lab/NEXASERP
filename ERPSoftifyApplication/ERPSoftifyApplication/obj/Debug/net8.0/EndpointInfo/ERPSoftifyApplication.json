@@ -255,6 +255,18 @@
         }
       }
     },
+    "/api/CompanySetting/getallcompanydata": {
+      "get": {
+        "tags": [
+          "CompanySetting"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/CompanySetting/company": {
       "post": {
         "tags": [
@@ -1679,7 +1691,8 @@
             "format": "int32"
           },
           "isActive": {
-            "type": "boolean"
+            "type": "boolean",
+            "nullable": true
           },
           "status": {
             "type": "string",
@@ -1945,19 +1958,19 @@
             "type": "string",
             "nullable": true
           },
+          "userName": {
+            "type": "string",
+            "nullable": true
+          },
           "email": {
             "type": "string",
             "nullable": true
           },
-          "password": {
+          "phoneNumber": {
             "type": "string",
             "nullable": true
           },
           "roleId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "tenantId": {
             "type": "integer",
             "format": "int32"
           },
@@ -1969,22 +1982,19 @@
             "type": "integer",
             "format": "int32"
           },
-          "phoneNumber": {
-            "type": "string",
-            "nullable": true
-          },
-          "websiteUrl": {
-            "type": "string",
-            "nullable": true
-          },
-          "employeeId": {
+          "tenantId": {
             "type": "integer",
             "format": "int32"
           },
-          "isActive": {
-            "type": "boolean"
-          },
           "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "password": {
             "type": "string",
             "nullable": true
           }

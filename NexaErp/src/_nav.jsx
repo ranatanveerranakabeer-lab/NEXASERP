@@ -9,7 +9,8 @@
  *
  * @module _nav
  */
-
+// _nav.js mein ye line likhen
+import { useAppLanguage } from "./components/common/LanguageContext";
 import React from 'react'
 import CIcon from '@coreui/icons-react'
 import { cilSettings, cilUser } from '@coreui/icons'
@@ -75,34 +76,35 @@ import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
  *   name: 'Theme',
  * }
  */
+ const { l } = useAppLanguage();
 const _nav = [
   {
     component: CNavItem,
-    name: 'Dashboard',
+    name: l('Dashboard'),
     to: '/dashboard',
     icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
     badge: {
       color: 'info',
-      text: 'NEW',
+      text: l('new'),
     },
   },
   {
     component: CNavTitle,
-    name: 'Setups',
+    name: l('Setups'),
   },
   {
     component: CNavGroup,
-    name: 'Setups',
+    name: l('Setups'),
     icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
-        name: 'Users',
+        name: l('Users'),
         to: '/setups/users',
       },
       {
         component: CNavItem,
-        name: 'Roles',
+        name: l('Roles'),
         to: '/setups/roles',
       },
       {

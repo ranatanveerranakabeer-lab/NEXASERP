@@ -21,6 +21,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { setSidebarShow } from 'src/redux/slice/sidebarSlice'
 import React, { useEffect, useRef } from 'react'
 import { NavLink } from 'react-router-dom'
+import ThemeSwitcher from './common/ThemeSwitcher'
 import {
   CContainer,
   CDropdown,
@@ -32,7 +33,7 @@ import {
   CHeaderToggler,
   CNavLink,
   CNavItem,
-  useColorModes,
+  //useColorModes,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import {
@@ -44,7 +45,7 @@ import {
   cilMoon,
   cilSun,
 } from '@coreui/icons'
-
+import LanguageSelector from './common/LanguageSelector'
 import { AppBreadcrumb } from './index'
 import { AppHeaderDropdown } from './header/index'
 
@@ -57,11 +58,12 @@ import { AppHeaderDropdown } from './header/index'
  * - Scroll-based shadow effect
  * - Responsive navigation
  *
+ * 
  * @returns {React.ReactElement} Header component with navigation and controls
  */
 const AppHeader = () => {
   const headerRef = useRef()
-  const { colorMode, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')
+ // const { colorMode, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')
 
   const dispatch = useDispatch()
 const sidebarShow = useSelector((state) => state.ui.sidebarShow)
@@ -99,6 +101,8 @@ const sidebarShow = useSelector((state) => state.ui.sidebarShow)
           </CNavItem> */}
         </CHeaderNav>
         <CHeaderNav className="ms-auto">
+          <ThemeSwitcher />
+          <LanguageSelector />
           <CNavItem>
             <CNavLink href="#">
               <CIcon icon={cilBell} size="lg" />
@@ -119,7 +123,7 @@ const sidebarShow = useSelector((state) => state.ui.sidebarShow)
           <li className="nav-item py-1">
             <div className="vr h-100 mx-2 text-body text-opacity-75"></div>
           </li>
-          <CDropdown variant="nav-item" placement="bottom-end">
+          {/* <CDropdown variant="nav-item" placement="bottom-end">
             <CDropdownToggle caret={false}>
               {colorMode === 'dark' ? (
                 <CIcon icon={cilMoon} size="lg" />
@@ -158,7 +162,7 @@ const sidebarShow = useSelector((state) => state.ui.sidebarShow)
                 <CIcon className="me-2" icon={cilContrast} size="lg" /> Auto
               </CDropdownItem>
             </CDropdownMenu>
-          </CDropdown>
+          </CDropdown> */}
           <li className="nav-item py-1">
             <div className="vr h-100 mx-2 text-body text-opacity-75"></div>
           </li>

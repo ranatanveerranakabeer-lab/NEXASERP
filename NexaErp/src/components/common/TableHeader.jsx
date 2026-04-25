@@ -1,44 +1,37 @@
-import React from 'react'
-import { CTableHeaderCell } from '@coreui/react'
+import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 const TableHeader = ({ col, activeColumn, setActiveColumn }) => {
-  const isActive = activeColumn === col
+  const { t } = useTranslation();
+
+  // Logic: "User Name" -> "user_name"
+  // Taake i18n file mein key match ho jaye
+  const translationKey = col.toLowerCase().replace(/ /g, "_");
+  const translatedLabel = t(translationKey, { defaultValue: col });
 
   return (
-    <CTableHeaderCell
+    <th 
+      className="position-relative" 
+      style={{ cursor: 'pointer', paddingBottom: '12px' }} 
       onClick={() => setActiveColumn(col)}
-      style={{
-        cursor: 'pointer',
-        padding: '12px 16px',
-      }}
     >
-      <div
-        style={{
-          position: 'relative',
-          display: 'inline-block',
-          width: '100%',
-          color: isActive ? '#7c3aed' : '#6b7280',
-          fontWeight: isActive ? '600' : '400',
-        }}
-      >
-        {col}
-
-        {/* ✅ Perfect underline */}
-        <div
-          style={{
-            position: 'absolute',
-            bottom: '-6px',
-            left: 0,
-            width: isActive ? '100%' : '0%',
-            height: '3px',
-            background: 'linear-gradient(90deg, #7c3aed, #4c1d95)',
-            borderRadius: '5px',
-            transition: 'all 0.3s ease',
-          }}
-        />
+      <div className="d-flex align-items-center justify-content-between">
+        <span>{translatedLabel}</span>
       </div>
-    </CTableHeaderCell>
-  )
-}
+      
+      {/* Purple Active Bar Logic */}
+      {activeColumn === col && (
+        <div 
+          className="position-absolute bottom-0 start-0 w-100" 
+          style={{ 
+            height: '3px', 
+            backgroundColor: '#6f42c1', // Purple Color
+            transition: 'all 0.3s ease' 
+          }} 
+        />
+      )}
+    </th>
+  );
+};
 
-export default TableHeader
+export default TableHeader;

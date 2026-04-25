@@ -41,7 +41,7 @@ const AppButton = ({
       color: '#fff',
     },
     golden: {
-      background: '#facc15',
+      background: '#c1a545',
       border: 'none',
       borderRadius: '8px',
       color: '#000',

@@ -112,6 +112,16 @@
   },
   {
     "ContainingType": "ERPSoftifyApplication.Controllers.CompanySettingController",
+    "Method": "GetAll",
+    "RelativePath": "api/CompanySetting/getallcompanydata",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ERPSoftifyApplication.Controllers.CompanySettingController",
     "Method": "SaveOrUpdateProfile",
     "RelativePath": "api/CompanySetting/profile",
     "HttpMethod": "POST",

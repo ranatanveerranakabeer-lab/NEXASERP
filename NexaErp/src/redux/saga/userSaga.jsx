@@ -35,7 +35,6 @@ function* updateUserSaga(action) {
   try {
     const res = yield call(userService.update, action.payload)
     console.log('>>> Saga: updateUserSaga Success Response:', res)
-    yield put(updateUserCompleted(res))
     yield put(getAllUsers()) 
   } catch (e) {
     console.error('>>> Saga: Update User Error:', e)

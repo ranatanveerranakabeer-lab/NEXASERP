@@ -69,7 +69,12 @@ namespace ERPSoftifyApplication.Controllers
             var company = await _settingService.GetCompanySettingAsync(companyId, cancellationToken);
             return Ok(company);
         }
-
+        [HttpGet("getallcompanydata")]
+        public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
+        {
+            var result = await _settingService.GetAllCompanyAsync(cancellationToken);
+            return Ok(result);
+        }
         [HttpPost("company")]
         public async Task<IActionResult> SaveOrUpdateCompany(  [FromBody] CompanySetting company, CancellationToken cancellationToken)
         {

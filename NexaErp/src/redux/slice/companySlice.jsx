@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 const initialState = {
   company: null,
   profile: null,
+  companies: [],
   isLoading: false,
 }
 
@@ -12,6 +13,13 @@ const companySlice = createSlice({
   reducers: {
     getCompany: (state, action) => {
       state.isLoading = true
+    },
+    getAllCompany: (state) => {
+      state.isLoading = true
+    },
+    setAllCompanyData: (state, action) => {
+      state.companies = action.payload || []
+      state.isLoading = false
     },
     getProfile: (state, action) => {
       state.isLoading = true
@@ -48,11 +56,13 @@ const companySlice = createSlice({
 export const {
   getCompany,
   saveCompany,
+  getAllCompany,
   setCompany,
   saveCompanyCompleted,
   getProfile,
   saveProfile,
   setProfile,
+  setAllCompanyData,
   saveProfileCompleted,
   setIsLoading,
 } = companySlice.actions

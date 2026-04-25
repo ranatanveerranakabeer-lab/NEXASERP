@@ -1,43 +1,24 @@
-/**
- * DefaultLayout Component
- *
- * Main application layout wrapper that composes the primary UI structure
- * for authenticated/protected routes.
- *
- * Layout structure:
- * - AppSidebar: Collapsible navigation sidebar
- * - AppHeader: Top navigation bar with user menu and theme switcher
- * - AppContent: Main content area with route rendering
- * - AppFooter: Footer with links and copyright
- *
- * This layout is used for all routes defined in routes.js, providing
- * a consistent structure across the application.
- *
- * @component
- * @example
- * // Used in App.js for protected routes
- * <Route path="*" element={<DefaultLayout />} />
- */
-
-import React from 'react'
+import React, { useEffect } from 'react'
 import { AppContent, AppSidebar, AppFooter, AppHeader } from '../components/index'
 
-/**
- * DefaultLayout functional component
- *
- * Renders the main application layout with:
- * - Fixed sidebar navigation
- * - Sticky header
- * - Flexible content area
- * - Footer at bottom
- *
- * Uses flexbox for proper content stretching and footer positioning.
- *
- * @returns {React.ReactElement} Complete application layout
- */
 const DefaultLayout = () => {
+  useEffect(() => {
+    // Sidebar ka color apply karne ki logic
+    const updateSidebarTheme = () => {
+      const savedColor = localStorage.getItem('appThemeColor') || '#321fdb'; // Default Blue
+      // Root level par variable set kar rahe hain
+      document.documentElement.style.setProperty('--cui-primary', savedColor);
+    };
+
+    updateSidebarTheme();
+    
+    // Agar kisi doosry tab ya component mein color change ho toh foran update ho
+    window.addEventListener('storage', updateSidebarTheme);
+    return () => window.removeEventListener('storage', updateSidebarTheme);
+  }, []);
+
   return (
-    <div>
+    <div className="nexa-erp-layout">
       <AppSidebar />
       <div className="wrapper d-flex flex-column min-vh-100">
         <AppHeader />

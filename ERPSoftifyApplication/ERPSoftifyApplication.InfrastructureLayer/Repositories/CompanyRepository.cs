@@ -64,7 +64,12 @@ namespace ERPSoftifyApplication.InfrastructureLayer.Repositories
                                  .FirstOrDefaultAsync(c => c.Id == companyId, cancellationToken)
                                  ?? throw new Exception("Company not found");
         }
-
+        public async Task<List<CompanySetting>> GetAllAsync(CancellationToken cancellationToken)
+        {
+            return await _context.CompanySettings
+                .AsNoTracking()
+                .ToListAsync(cancellationToken);
+        }
         public async Task<CompanySetting> SaveOrUpdateCompanySettingAsync(CompanySetting company, CancellationToken cancellationToken)
         {
             var existingCompany = await _context.CompanySettings

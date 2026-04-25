@@ -45,8 +45,6 @@ namespace ERPSoftifyApplication.InfrastructureLayer.Repositories
                 .Include(x => x.Branch)
                 .ToListAsync(cancellationToken);
         }
-
-        // ✅ GET USERS BY TENANT 🔥🔥🔥 (IMPORTANT)
         public async Task<List<User>> GetByTenantAsync(int tenantId, CancellationToken cancellationToken)
         {
             return await _context.Users
@@ -58,20 +56,9 @@ namespace ERPSoftifyApplication.InfrastructureLayer.Repositories
         // ✅ UPDATE USER (Tenant Safe)
         public async Task<User> UpdateAsync(User user, CancellationToken cancellationToken)
         {
-            var existingUser = await _context.Users
-                .FirstOrDefaultAsync(x => x.ID == user.ID, cancellationToken);
-
-            if (existingUser == null)
-                throw new Exception("User not found");
-
-            // 🔥 Tenant change not allowed (important security rule)
-            if (existingUser.TenantId != user.TenantId)
-                throw new Exception("Tenant change not allowed");
-
-            _context.Entry(existingUser).CurrentValues.SetValues(user);
-
+            _context.Users.Update(user);
             await _context.SaveChangesAsync(cancellationToken);
-            return existingUser;
+            return user;
         }
 
         // ✅ DELETE USER

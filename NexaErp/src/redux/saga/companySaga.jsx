@@ -2,6 +2,7 @@ import { all, call, fork, put, takeLatest } from 'redux-saga/effects'
 import companyService from '../services/companyService'
 import {
   getCompany,
+  getAllCompany,
   setProfile,
   getProfile,
   setIsLoading,
@@ -10,6 +11,7 @@ import {
   saveProfileCompleted,
   saveCompany,
   saveProfile,
+  setAllCompanyData,
 } from '../slice/companySlice'
 
 // --- Workers ---
@@ -25,7 +27,17 @@ function* getProfileWorker(action) {
     yield put(setIsLoading(false))
   }
 }
-
+function* getAllCompanySaga() {
+  //console.log('>>> Saga: getAllCompanySaga Triggered')
+  try {
+    const data = yield call(companyService.getAll)
+    console.log('>>> Saga: getAllCompanySaga Success Data:', data)
+    yield put(setAllCompanyData(data))
+  } catch (e) {
+    console.error('>>> Saga: Get Companies Error:', e)
+    yield put(setAllCompanyData([]))
+  }
+}
 function* saveProfileWorker(action) {
   try {
     yield put(setIsLoading(true))
@@ -66,7 +78,10 @@ function* saveCompanyWorker(action) {
 }
 
 // --- Watchers ---
-
+function* watchGetAllCompany() {
+  // console.log('Watcher: watchGetAllCompany Active', getAllCompany.type)
+  yield takeLatest(getAllCompany.type, getAllCompanySaga)
+}
 function* watchGetProfile() {
   yield takeLatest(getProfile.type, getProfileWorker)
 }
@@ -91,5 +106,6 @@ export function* companySaga() {
     fork(watchSaveProfile),
     fork(watchGetCompany),
     fork(watchSaveCompany),
+    fork(watchGetAllCompany),
   ])
 }

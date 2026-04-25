@@ -35,45 +35,53 @@ namespace ERPSoftifyApplicatione.ApplicationLayer.Services
 
         #region Create User
         public async Task<ResponseDataModel<UserDto>> CreateUserAsync(CreateUserDto dto, CancellationToken cancellationToken)
-        {           
-            var user = new User
+        {
+            try
             {
-                Name = dto.Name,
-                Email = dto.Email,
-                RoleId = dto.RoleId,
-                TenantId = dto.TenantId,
-                BranchId = dto.BranchId,
-                CompanyId = dto.CompanyId,
-                EmployeeId = dto.EmployeeId,
-                PhoneNumber = dto.PhoneNumber,
-                WebsiteUrl = dto.WebsiteUrl,
-                PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
-                IsActive = dto.IsActive,
-                Status = dto.Status,
-                UpdatedAt = DateTime.UtcNow
-            };
+                var user = new User
+                {
+                    Name = dto.Name,
+                    Email = dto.Email,
+                    RoleId = dto.RoleId,
+                    TenantId = dto.TenantId,
+                    BranchId = dto.BranchId,
+                    CompanyId = dto.CompanyId,                 
+                    PhoneNumber = dto.PhoneNumber,
+                    WebsiteUrl = dto.WebsiteUrl,
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
+                    IsActive = dto.IsActive ?? false,
+                    Status = dto.Status,
+                    UpdatedAt = DateTime.UtcNow,
+                    EmployeeId = 1
+                };
 
-            var result = await _UserRepository.CreateAsync(user, cancellationToken);
+                var result = await _UserRepository.CreateAsync(user, cancellationToken);
 
-            var userDto = new UserDto
+                var userDto = new UserDto
+                {
+                    Id = result.ID,
+                    Name = result.Name,
+                    UserName = result.Name,
+                    Email = result.Email,
+                    Password = result.PasswordHash,
+                    RoleId = result.RoleId,
+                    TenantId = result.TenantId,
+                    BranchId = result.BranchId,
+                    CompanyId = result.CompanyId,
+                    EmployeeId = result.EmployeeId,
+                    PhoneNumber = result.PhoneNumber,
+                    WebsiteUrl = result.WebsiteUrl,
+                    IsActive = dto.IsActive ?? false,
+                    Status = result.Status
+                };
+
+                return ResponseDataModel<UserDto>.SuccessResponse(userDto, "User created successfully");
+            }
+            catch (Exception ex)
             {
-                Id = result.ID,
-                Name = result.Name,
-                UserName = result.Name,
-                Email = result.Email,
-                Password = result.PasswordHash,
-                RoleId = result.RoleId,
-                TenantId = result.TenantId,
-                BranchId = result.BranchId,
-                CompanyId = result.CompanyId,
-                EmployeeId = result.EmployeeId,
-                PhoneNumber = result.PhoneNumber,
-                WebsiteUrl = result.WebsiteUrl,
-                IsActive = result.IsActive,
-                Status = result.Status
-            };
+                throw new Exception(ex.Message);
 
-            return ResponseDataModel<UserDto>.SuccessResponse(userDto, "User created successfully");
+            }
         }
         #endregion
 
@@ -110,54 +118,64 @@ namespace ERPSoftifyApplicatione.ApplicationLayer.Services
         #region Update User
         public async Task<ResponseDataModel<UserDto>> UpdateUserAsync(int id, UpdateUserDto dto, CancellationToken cancellationToken)
         {
-            var user = await _UserRepository.GetByIdAsync(id, cancellationToken);
-            if (user == null)
-                return ResponseDataModel<UserDto>.FailureResponse("User not found");
-
-            // Validate foreign keys
-            if (!await _UserRepository.CompanyExistsAsync(dto.CompanyId, cancellationToken))
-                return ResponseDataModel<UserDto>.FailureResponse("Company not found");
-
-            if (!await _UserRepository.BranchExistsAsync(dto.BranchId, cancellationToken))
-                return ResponseDataModel<UserDto>.FailureResponse("Branch not found");
-
-            // Update fields
-            user.Name = dto.Name;
-            user.Email = dto.Email;
-            user.RoleId = dto.RoleId;
-            user.TenantId = dto.TenantId;
-            user.BranchId = dto.BranchId;
-            user.CompanyId = dto.CompanyId;
-            user.EmployeeId = dto.EmployeeId;
-            user.PhoneNumber = dto.PhoneNumber;
-            user.WebsiteUrl = dto.WebsiteUrl;
-
-            if (!string.IsNullOrEmpty(dto.Password))
-                user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password);
-
-            user.UpdatedAt = DateTime.UtcNow;
-
-            var updated = await _UserRepository.UpdateAsync(user, cancellationToken);
-
-            var dtoResult = new UserDto
+            try
             {
-                Id = updated.ID,
-                Name = updated.Name,
-                UserName = updated.Name,
-                Email = updated.Email,
-                RoleId = updated.RoleId,
-                TenantId = updated.TenantId,
-                BranchId = updated.BranchId,
-                CompanyId = updated.CompanyId,
-                EmployeeId = updated.EmployeeId,
-                PhoneNumber = updated.PhoneNumber,
-                WebsiteUrl = updated.WebsiteUrl,
-                IsActive = updated.IsActive,
-                Status = updated.Status,
-                Password = updated.PasswordHash
-            };
+                var user = await _UserRepository.GetByIdAsync(id, cancellationToken);
+                if (user == null)
+                    return ResponseDataModel<UserDto>.FailureResponse("User not found");
 
-            return ResponseDataModel<UserDto>.SuccessResponse(dtoResult, "User updated successfully");
+                // Validate foreign keys
+                if (!await _UserRepository.CompanyExistsAsync(dto.CompanyId, cancellationToken))
+                    return ResponseDataModel<UserDto>.FailureResponse("Company not found");
+
+                if (!await _UserRepository.BranchExistsAsync(dto.BranchId, cancellationToken))
+                    return ResponseDataModel<UserDto>.FailureResponse("Branch not found");
+
+                // Update fields
+                user.Name = dto.Name;
+                user.Email = dto.Email;
+                user.RoleId = dto.RoleId;
+                user.TenantId = dto.TenantId;
+                user.BranchId = dto.BranchId;
+                user.CompanyId = dto.CompanyId;
+                user.EmployeeId = 1;
+                user.PhoneNumber = dto.PhoneNumber;
+                user.Status = dto.Status;
+
+
+                if (!string.IsNullOrEmpty(dto.Password))
+                    user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password);
+
+                user.UpdatedAt = DateTime.UtcNow;
+
+                var updated = await _UserRepository.UpdateAsync(user, cancellationToken);
+
+                // ... updated variable ke baad
+                var dtoResult = new UserDto
+                {
+                    Id = updated.ID,
+                    Name = updated.Name,
+                    UserName = updated.Name,
+                    Email = updated.Email,
+                    RoleId = updated.RoleId,
+                    TenantId = updated.TenantId,   // <-- Ye ADD karein
+                    BranchId = updated.BranchId,   // <-- Ye ADD karein
+                    CompanyId = updated.CompanyId, // <-- Ye ADD karein
+                    EmployeeId = 1,
+                    PhoneNumber = updated.PhoneNumber,
+                    WebsiteUrl = updated.WebsiteUrl,
+                    IsActive = updated.IsActive,
+                    Status = updated.Status,
+                    Password = updated.PasswordHash
+                };
+
+                return ResponseDataModel<UserDto>.SuccessResponse(dtoResult, "User updated successfully");
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         }
         #endregion
 
@@ -350,15 +368,17 @@ namespace ERPSoftifyApplicatione.ApplicationLayer.Services
                 Name = u.Name,
                 UserName = u.Name,
                 Email = u.Email,
-                RoleId = u.RoleId,
-                TenantName=u.Tenant.Name,
-                BranchName=u.Branch.Name,
-                RoleName=u.Role.RoleName,
+                RoleId = u.RoleId, // Ensure ye mojud ho
+                TenantId = u.TenantId,   // <-- Ye ADD karein
+                BranchId = u.BranchId,   // <-- Ye ADD karein
+                CompanyId = u.CompanyId, // <-- Ye ADD karein
+                TenantName = u.Tenant.Name,
+                BranchName = u.Branch.Name,
+                RoleName = u.Role.RoleName,
                 CompanyName = u.Company.CompanyName,
                 PhoneNumber = u.PhoneNumber,
-                WebsiteUrl = u.WebsiteUrl,
-                IsActive = u.IsActive,
-                Status = u.Status
+                Status=u.Status,
+                // ... baqi fields
             }).ToList();
 
             return ResponseDataModel<List<UserDto>>.SuccessResponse(dtoList);

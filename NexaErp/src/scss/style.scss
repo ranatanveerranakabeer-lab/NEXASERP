@@ -367,3 +367,29 @@ body {
     --cui-footer-bg: var(--cui-body-bg);
   }
 }
+/* 🔥 FORCE THEME OVERRIDE */
+
+:root {
+  --cui-primary: var(--dynamic-primary) !important;
+}
+
+/* BUTTON */
+.btn-primary {
+  background-color: var(--cui-primary) !important;
+  border-color: var(--cui-primary) !important;
+}
+
+/* HEADER */
+.header {
+  background-color: var(--cui-primary) !important;
+}
+
+/* SIDEBAR */
+.sidebar {
+  background-color: var(--cui-primary) !important;
+}
+
+/* ACTIVE LINKS */
+.nav-link.active {
+  color: var(--cui-primary) !important;
+}

@@ -1,4 +1,6 @@
-﻿using ERPSoftifyApplication.DomainLayer.Entities;
+﻿using ERPSoftifyApplication.DomainLayer;
+using ERPSoftifyApplication.DomainLayer.Entities;
+using ERPSoftifyApplicatione.ApplicationLayer.DTO.PermissionsDto;
 using ERPSoftifyApplicatione.ApplicationLayer.DTO.User;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -13,7 +15,7 @@ namespace ERPSoftifyApplicatione.ApplicationLayer.Interface
     {
         Task<UserProfileDto> GetUserProfileAsync(int userId, CancellationToken cancellationToken);
         Task<UserProfileDto> SaveOrUpdateUserProfileAsync(UserProfileDto user, IFormFile? profileImage, CancellationToken cancellationToken);
-
+        Task<ResponseDataModel<List<CompanySetting>>> GetAllCompanyAsync(CancellationToken cancellationToken);
         // ----- COMPANY -----
         Task<CompanySetting> GetCompanySettingAsync(int companyId, CancellationToken cancellationToken);
         Task<CompanySetting> SaveOrUpdateCompanySettingAsync(CompanySetting company, CancellationToken cancellationToken);

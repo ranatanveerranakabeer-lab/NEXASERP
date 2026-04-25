@@ -12,6 +12,7 @@ namespace ERPSoftifyApplicatione.ApplicationLayer.Interface
         int TenantId { get; }
         int BranchId { get; }
         int CompanyId { get; }
+        int RoleId { get; }
         bool IsAuthenticated { get; }
     }
 }

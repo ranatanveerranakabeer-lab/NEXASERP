@@ -33,6 +33,7 @@ namespace ERPSoftifyApplicatione.ApplicationLayer.Services
         public int TenantId => GetIntClaim("TenantId");
         public int CompanyId => GetIntClaim("CompanyId");
         public int BranchId => GetIntClaim("BranchId");
+        public int RoleId => GetIntClaim("RoleId");
 
         private int GetIntClaim(string key)
         {

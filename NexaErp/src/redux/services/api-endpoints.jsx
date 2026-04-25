@@ -1,4 +1,3 @@
-
 export const API_ENDPOINTS = {
   USERS: {
     LOGIN: '/api/Users/login',
@@ -11,8 +10,7 @@ export const API_ENDPOINTS = {
     FORGOT_PASSWORD: '/api/Users/forgot-password',
     RESET_PASSWORD: '/api/Users/reset-password',
     UPDATE_EMAIL: '/api/Users/update-email',
-    ACTIVATE: (id, isActive) =>
-      `/api/Users/${id}/activate?isActive=${isActive}`,
+    ACTIVATE: (id, isActive) => `/api/Users/${id}/activate?isActive=${isActive}`,
     GET_ROLES: '/api/Users/roles',
   },
 
@@ -42,14 +40,13 @@ export const API_ENDPOINTS = {
 
   SETTINGS: {
     PROFILE: {
-      GET_BY_USER_ID: (userId) =>
-        `/api/CompanySetting/profile/${userId}`,
+      GET_BY_USER_ID: (userId) => `/api/CompanySetting/profile/${userId}`,
       SAVE_OR_UPDATE: '/api/CompanySetting/profile',
     },
     COMPANY: {
-      GET_BY_COMPANY_ID: (companyId) =>
-        `/api/CompanySetting/company/${companyId}`,
+      GET_BY_COMPANY_ID: (companyId) => `/api/CompanySetting/company/${companyId}`,
       SAVE_OR_UPDATE: '/api/CompanySetting/company',
+      GET_ALL: '/api/CompanySetting/getallcompanydata',
     },
   },
 

@@ -1,17 +1,22 @@
 ﻿using ERPSoftifyApplication.DomainLayer.Entities;
+using ERPSoftifyApplicatione.ApplicationLayer.Interface;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Linq.Expressions;
 
 namespace ERPSoftifyApplication.InfrastructureLayer
 {
     public class DataContext : DbContext
     {
-        public DataContext(DbContextOptions<DataContext> options) : base(options) { }
+        private readonly ICurrentUserService _currentUserService;
 
+        public DataContext(DbContextOptions<DataContext> options, ICurrentUserService currentUserService)
+            : base(options)
+        {
+            _currentUserService = currentUserService;
+        }
+        public int CurrentTenantId => _currentUserService.TenantId;
+
+        #region DbSets
         public DbSet<Product> Products { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Customer> Customers { get; set; }
@@ -20,7 +25,7 @@ namespace ERPSoftifyApplication.InfrastructureLayer
         public DbSet<QuotationItem> QuotationItems { get; set; }
         public DbSet<Permission> Permissions { get; set; }
         public DbSet<RoleMenu> RoleMenus { get; set; }
-        public DbSet<RolePermission> RolePermission { get; set; }
+        public DbSet<RolePermission> RolePermissions { get; set; }
         public DbSet<Leave> Leaves { get; set; }
         public DbSet<Payment> Payments { get; set; }
         public DbSet<Lead> Leads { get; set; }
@@ -38,7 +43,6 @@ namespace ERPSoftifyApplication.InfrastructureLayer
         public DbSet<Attendance> Attendances { get; set; }
         public DbSet<AuditLog> AuditLogs { get; set; }
         public DbSet<Role> Roles { get; set; }
-        public DbSet<RolePermission> RolePermissions { get; set; }
         public DbSet<SalesOrder> SalesOrders { get; set; }
         public DbSet<ServiceReport> ServiceReports { get; set; }
         public DbSet<TenantSetting> TenantSettings { get; set; }
@@ -46,19 +50,57 @@ namespace ERPSoftifyApplication.InfrastructureLayer
         public DbSet<Branch> Branches { get; set; }
         public DbSet<UserProfile> UserProfiles { get; set; }
         public DbSet<CompanySetting> CompanySettings { get; set; }
+        #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<RoleMenu>()
-            .HasKey(rm => new { rm.RoleId, rm.MenuId });
+                .HasKey(rm => new { rm.RoleId, rm.MenuId });
 
-            modelBuilder.Entity<RoleMenu>()
-                .HasOne(rm => rm.Menu)
-                .WithMany(m => m.RoleMenus)
-                .HasForeignKey(rm => rm.MenuId);
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+
+                if (typeof(IMustHaveTenant).IsAssignableFrom(entityType.ClrType))
+                {
+                    var parameter = Expression.Parameter(entityType.ClrType, "e");
+                    var property = Expression.Property(parameter, nameof(IMustHaveTenant.TenantId));
+
+                    var filter = Expression.Lambda(
+                        Expression.Equal(
+                            property,
+                            Expression.Property(Expression.Constant(this), nameof(DataContext.CurrentTenantId))
+                        ),
+                        parameter
+                    );
+
+                    modelBuilder.Entity(entityType.ClrType).HasQueryFilter(filter);
+                }
+            }
         }
 
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            var entries = ChangeTracker.Entries<IMustHaveTenant>();
+
+            foreach (var entry in entries)
+            {
+                switch (entry.State)
+                {
+                    case EntityState.Added:
+                        if (entry.Entity.TenantId == 0)
+                        {
+                            entry.Entity.TenantId = CurrentTenantId;
+                        }
+                        break;
+
+                    case EntityState.Modified:
+                        entry.Property(x => x.TenantId).IsModified = false;
+                        break;
+                }
+            }
+            return base.SaveChangesAsync(cancellationToken);
+        }
     }
 }

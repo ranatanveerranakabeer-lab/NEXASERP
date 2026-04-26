@@ -21,14 +21,40 @@ import {
   cilUser,
 } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
-
+import { useEffect, useMemo } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import avatar8 from './../../assets/images/avatars/8.jpg'
-
+import { getProfile } from '../../redux/slice/companySlice'
 const AppHeaderDropdown = () => {
+  const dispatch = useDispatch()
+
+  // Redux store se profile aur loading state nikalna
+  const { profile } = useSelector((state) => state.companies)
+  const BASE_URL = 'https://localhost:7016'
+
+  // Professional Way: Header load hotay hi profile data fetch karega
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user'))
+    // Agar store mein profile nahi hai, tabhi fetch karein (Performance optimize)
+    if (!profile && (user?.userId || user?.id)) {
+      dispatch(getProfile(user.userId || user.id))
+    }
+  }, [dispatch, profile])
+
+  // Avatar Image Path Logic
+  const avatarImage = useMemo(() => {
+    if (profile?.profilePictureUrl) {
+      const path = profile.profilePictureUrl.startsWith('/')
+        ? profile.profilePictureUrl
+        : `/${profile.profilePictureUrl}`
+      return `${BASE_URL}${path}`
+    }
+    return 'https://via.placeholder.com/150' // Default if no image
+  }, [profile?.profilePictureUrl])
   return (
     <CDropdown variant="nav-item">
       <CDropdownToggle placement="bottom-end" className="py-0 pe-0" caret={false}>
-        <CAvatar src={avatar8} size="md" />
+        <CAvatar src={avatarImage} size="md" />
       </CDropdownToggle>
       <CDropdownMenu className="pt-0" placement="bottom-end">
         <CDropdownHeader className="bg-body-secondary fw-semibold mb-2">Account</CDropdownHeader>

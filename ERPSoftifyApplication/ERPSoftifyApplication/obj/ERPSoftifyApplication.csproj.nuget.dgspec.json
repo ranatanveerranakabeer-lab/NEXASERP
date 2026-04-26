@@ -101,6 +101,9 @@
             "projectReferences": {
               "C:\\NEXSERP\\ERPSoftifyApplication\\ERPSoftifyApplication.DomainLayer\\ERPSoftifyApplication.DomainLayer.csproj": {
                 "projectPath": "C:\\NEXSERP\\ERPSoftifyApplication\\ERPSoftifyApplication.DomainLayer\\ERPSoftifyApplication.DomainLayer.csproj"
+              },
+              "C:\\NEXSERP\\ERPSoftifyApplication\\ERPSoftifyApplicatione.ApplicationLayer\\ERPSoftifyApplicatione.ApplicationLayer.csproj": {
+                "projectPath": "C:\\NEXSERP\\ERPSoftifyApplication\\ERPSoftifyApplicatione.ApplicationLayer\\ERPSoftifyApplicatione.ApplicationLayer.csproj"
               }
             }
           }

@@ -34,10 +34,11 @@ namespace ERPSoftifyApplication.InfrastructureLayer.Repositories
 
         public async Task<List<Branch>> GetAllAsync(CancellationToken cancellationToken)
         {
-            return await _context.Branches
+            var branchlist= await _context.Branches
     .Include(b => b.ParentBranch) // <- important
     .AsNoTracking()
     .ToListAsync(cancellationToken);
+            return branchlist;
         }
 
         public async Task<Branch> UpdateAsync(Branch Branch, CancellationToken cancellationToken)

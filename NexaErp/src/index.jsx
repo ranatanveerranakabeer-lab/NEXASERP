@@ -14,7 +14,7 @@ createRoot(document.getElementById('root')).render(
   <Provider store={store}>
     <ThemeProvider>
       {/* 2. LanguageProvider ko yahan wrap karen */}
-      <LanguageProvider> 
+      <LanguageProvider>
         <ToastProvider>
           <App />
         </ToastProvider>

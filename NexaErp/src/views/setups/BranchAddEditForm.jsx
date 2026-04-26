@@ -1,4 +1,6 @@
 import React from 'react'
+import { useFormik } from 'formik'
+import * as Yup from 'yup'
 import {
   CModal,
   CModalHeader,
@@ -7,163 +9,164 @@ import {
   CModalFooter,
   CForm,
   CFormInput,
-  CFormCheck,
-  CButton,
   CRow,
   CCol,
+  CFormCheck,
+  CFormSelect,
 } from '@coreui/react'
-
 import AppButton from '../../components/common/AppButton'
+import ValidationError from '../../components/common/ValidationError'
+import { useDispatch } from 'react-redux'
+import { createBranch, updateBranch } from '../../redux/slice/branchSlice'
 
-function BranchAddEditForm({ visible, setVisible, form, setForm, handleSave, branches = [] }) {
+function BranchAddEditForm({ visible, setVisible, form, branches }) {
+  const dispatch = useDispatch()
+
+  const validationSchema = Yup.object({
+    name: Yup.string().required('Branch name is required'),
+    code: Yup.string().required('Code is required'),
+    city: Yup.string().required('City is required'),
+  })
+
+  const formik = useFormik({
+    initialValues: {
+      id: form.id || 0,
+      name: form.name || '',
+      code: form.code || '',
+      street: form.street || '',
+      city: form.city || '',
+      emirate: form.emirate || '',
+      contactPerson: form.contactPerson || '',
+      phone: form.phone || '',
+      address: form.address || '',
+      employeeCount: form.employeeCount || 0,
+      parentBranchId: form.parentBranchId || '',
+      isDefault: form.isDefault || false,
+      isActive: form.isActive ?? true,
+    },
+    enableReinitialize: true,
+    validationSchema: validationSchema,
+    onSubmit: (values) => {
+      if (values.id === 0) {
+        dispatch(createBranch(values))
+      } else {
+        dispatch(updateBranch(values))
+      }
+      setVisible(false)
+    },
+  })
+
+  const getFieldStyle = (name) => ({
+    borderColor: formik.touched[name] && formik.errors[name] ? '#7c3aed' : '#dee2e6',
+    borderRadius: '8px',
+  })
+
   return (
-    <CModal visible={visible} onClose={() => setVisible(false)} size="lg">
-      <CModalHeader>
-        <CModalTitle>Add / Edit Branch</CModalTitle>
+    <CModal
+      visible={visible}
+      onClose={() => setVisible(false)}
+      size="lg"
+      alignment="center"
+      backdrop="static"
+    >
+      <CModalHeader className="border-0 pb-0">
+        <CModalTitle className="fw-bold">
+          {form.id === 0 ? 'Add New Branch' : 'Edit Branch'}
+        </CModalTitle>
       </CModalHeader>
-
-      <CModalBody>
-        <CForm>
-          {/* ROW 1 */}
-          <CRow className="mb-3">
-            <CCol md={6}>
+      <CModalBody className="py-4">
+        <CForm onSubmit={formik.handleSubmit}>
+          <CRow>
+            <CCol md={6} className="mb-3">
               <CFormInput
-                placeholder="Code"
-                value={form.code || ''}
-                onChange={(e) => setForm({ ...form, code: e.target.value })}
+                label="Branch Code"
+                name="code"
+                style={getFieldStyle('code')}
+                value={formik.values.code}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+              />
+              <ValidationError message={formik.touched.code && formik.errors.code} />
+            </CCol>
+            <CCol md={6} className="mb-3">
+              <CFormInput
+                label="Branch Name"
+                name="name"
+                style={getFieldStyle('name')}
+                value={formik.values.name}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+              />
+              <ValidationError message={formik.touched.name && formik.errors.name} />
+            </CCol>
+            <CCol md={6} className="mb-3">
+              <CFormInput
+                label="City"
+                name="city"
+                style={getFieldStyle('city')}
+                value={formik.values.city}
+                onChange={formik.handleChange}
               />
             </CCol>
-
-            <CCol md={6}>
+            <CCol md={6} className="mb-3">
               <CFormInput
-                placeholder="Name"
-                value={form.name || ''}
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
+                label="Phone"
+                name="phone"
+                value={formik.values.phone}
+                onChange={formik.handleChange}
               />
             </CCol>
-          </CRow>
-
-          {/* ROW 2 */}
-          <CRow className="mb-3">
-            <CCol md={6}>
+            <CCol md={12} className="mb-3">
               <CFormInput
-                placeholder="Street"
-                value={form.street || ''}
-                onChange={(e) => setForm({ ...form, street: e.target.value })}
+                label="Full Address"
+                name="address"
+                value={formik.values.address}
+                onChange={formik.handleChange}
               />
             </CCol>
-
-            <CCol md={6}>
-              <CFormInput
-                placeholder="City"
-                value={form.city || ''}
-                onChange={(e) => setForm({ ...form, city: e.target.value })}
-              />
-            </CCol>
-          </CRow>
-
-          {/* ROW 3 */}
-          <CRow className="mb-3">
-            <CCol md={6}>
-              <CFormInput
-                placeholder="Emirate"
-                value={form.emirate || ''}
-                onChange={(e) => setForm({ ...form, emirate: e.target.value })}
-              />
-            </CCol>
-
-            <CCol md={6}>
-              <CFormInput
-                placeholder="Contact Person"
-                value={form.contactPerson || ''}
-                onChange={(e) => setForm({ ...form, contactPerson: e.target.value })}
-              />
-            </CCol>
-          </CRow>
-
-          {/* ROW 4 */}
-          <CRow className="mb-3">
-            <CCol md={6}>
-              <CFormInput
-                placeholder="Phone"
-                value={form.phone || ''}
-                onChange={(e) => setForm({ ...form, phone: e.target.value })}
-              />
-            </CCol>
-
-            <CCol md={6}>
-              <CFormInput
-                type="number"
-                placeholder="Employee Count"
-                value={form.employeeCount || 0}
-                onChange={(e) =>
-                  setForm({
-                    ...form,
-                    employeeCount: Number(e.target.value),
-                  })
-                }
-              />
-            </CCol>
-          </CRow>
-
-          {/* ROW 5 */}
-          <CRow className="mb-3">
-            <CCol md={12}>
-              <CFormInput
-                placeholder="Address"
-                value={form.address || ''}
-                onChange={(e) => setForm({ ...form, address: e.target.value })}
-              />
-            </CCol>
-          </CRow>
-
-          {/* ROW 6 */}
-          <CRow className="mb-3">
-            <CCol md={6}>
-              <select
-                className="form-select"
-                value={form.parentBranchId || ''}
-                onChange={(e) =>
-                  setForm({
-                    ...form,
-                    parentBranchId: e.target.value ? Number(e.target.value) : null,
-                  })
-                }
+            <CCol md={6} className="mb-3">
+              <CFormSelect
+                label="Parent Branch"
+                name="parentBranchId"
+                value={formik.values.parentBranchId}
+                onChange={formik.handleChange}
               >
-                <option value="">-- Parent Branch --</option>
-                {branches.map((b) => (
-                  <option key={b.id} value={b.id}>
-                    {b.name}
-                  </option>
-                ))}
-              </select>
+                <option value="">None</option>
+                {branches
+                  .filter((b) => b.id !== form.id)
+                  .map((b) => (
+                    <option key={b.id} value={b.id}>
+                      {b.name}
+                    </option>
+                  ))}
+              </CFormSelect>
             </CCol>
-
-            <CCol md={3} className="d-flex align-items-center">
+            <CCol md={3} className="d-flex align-items-end mb-4">
               <CFormCheck
-                label="Is Default"
-                checked={form.isDefault || false}
-                onChange={(e) => setForm({ ...form, isDefault: e.target.checked })}
+                label="Default"
+                name="isDefault"
+                checked={formik.values.isDefault}
+                onChange={formik.handleChange}
               />
             </CCol>
-
-            <CCol md={3} className="d-flex align-items-center">
+            <CCol md={3} className="d-flex align-items-end mb-4">
               <CFormCheck
-                label="Is Active"
-                checked={form.isActive ?? true}
-                onChange={(e) => setForm({ ...form, isActive: e.target.checked })}
+                label="Active"
+                name="isActive"
+                checked={formik.values.isActive}
+                onChange={formik.handleChange}
               />
             </CCol>
           </CRow>
         </CForm>
       </CModalBody>
-
-      <CModalFooter>
-        <CButton color="secondary" onClick={() => setVisible(false)}>
+      <CModalFooter className="border-0 pt-0">
+        <AppButton variant="ghost" color="secondary" onClick={() => setVisible(false)}>
           Cancel
-        </CButton>
-
-        <AppButton onClick={handleSave}>Save</AppButton>
+        </AppButton>
+        <AppButton className="px-4" onClick={formik.handleSubmit}>
+          {form.id === 0 ? 'Create' : 'Save Changes'}
+        </AppButton>
       </CModalFooter>
     </CModal>
   )

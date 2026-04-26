@@ -21,6 +21,7 @@
   </ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\ERPSoftifyApplication.DomainLayer\ERPSoftifyApplication.DomainLayer.csproj" />
+		<ProjectReference Include="..\ERPSoftifyApplicatione.ApplicationLayer\ERPSoftifyApplicatione.ApplicationLayer.csproj" />
 	</ItemGroup>
 
 </Project>

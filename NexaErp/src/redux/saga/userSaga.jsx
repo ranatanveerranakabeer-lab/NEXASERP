@@ -1,10 +1,21 @@
-import { all, call, fork, put, takeLatest } from 'redux-saga/effects'
+import { all, call, fork, delay, put, takeLatest } from 'redux-saga/effects'
+
 import userService from '../services/userService'
-import { getAllUsers, setAllUsers,
-  createUser, createUserCompleted,
-  updateUser, updateUserCompleted,
-  deleteUser, deleteUserCompleted,
-  setIsLoading, } from '../slice/userSlice'
+import {
+  getAllUsers,
+  setAllUsers,
+  createUser,
+  createUserCompleted,
+  updateUser,
+  updateUserCompleted,
+  deleteUser,
+  deleteUserCompleted,
+  setIsLoading,
+  loginFailure,
+  loginRequest,
+  loginSuccess,
+  resetError,
+} from '../slice/userSlice'
 
 // ================= WORKER SAGAS =================
 
@@ -24,7 +35,7 @@ function* createUserSaga(action) {
     const res = yield call(userService.create, action.payload)
     console.log('>>> Saga: createUserSaga Success Response:', res)
     yield put(createUserCompleted(res))
-    yield put(getAllUsers()) 
+    yield put(getAllUsers())
   } catch (e) {
     console.error('>>> Saga: Create User Error:', e)
     yield put(setIsLoading(false))
@@ -35,7 +46,7 @@ function* updateUserSaga(action) {
   try {
     const res = yield call(userService.update, action.payload)
     console.log('>>> Saga: updateUserSaga Success Response:', res)
-    yield put(getAllUsers()) 
+    yield put(getAllUsers())
   } catch (e) {
     console.error('>>> Saga: Update User Error:', e)
     yield put(setIsLoading(false))
@@ -47,40 +58,34 @@ function* deleteUserSaga(action) {
     yield call(userService.delete, action.payload)
     console.log('>>> Saga: deleteUserSaga Delete Successful')
     yield put(deleteUserCompleted(action.payload))
-    yield put(getAllUsers()) 
+    yield put(getAllUsers())
   } catch (e) {
     console.error('>>> Saga: Delete User Error:', e)
     yield put(setIsLoading(false))
   }
 }
-function* loginSaga(action) {
-  console.log(">>> LOGIN SAGA TRIGGERED", action.payload)
 
+function* loginSaga(action) {
   try {
     const res = yield call(userService.login, action.payload)
-
-    console.log(">>> LOGIN API FULL RESPONSE:", res)
-    console.log(">>> LOGIN SUCCESS?", res?.success)
-    console.log(">>> LOGIN DATA:", res?.data)
-
+    yield delay(2000)
     if (res?.success) {
-      console.log(">>> SAVING TOKEN:", res.data.token)
-
       localStorage.setItem('token', res.data.token)
-
-      // optional extra data save
       localStorage.setItem('user', JSON.stringify(res.data))
       yield put({ type: 'users/loginSuccess', payload: res.data })
     } else {
-      console.log(">>> LOGIN FAILED:", res?.message)
+      yield put({
+        type: 'users/loginFailure',
+        payload: res?.message || 'Invalid Email or Password',
+      })
     }
-
   } catch (e) {
-    console.error(">>> LOGIN ERROR:", e)
-    yield put({ type: 'users/setIsLoading', payload: false })
+    yield put({
+      type: 'users/loginFailure',
+      payload: e.response?.data?.message || e.message || 'Something went wrong',
+    })
   }
 }
-// ================= WATCHER SAGAS =================
 
 function* watchGetUsers() {
   yield takeLatest(getAllUsers.type, getUsersSaga)
@@ -109,7 +114,7 @@ export function* userSaga() {
     fork(watchGetUsers),
     fork(watchCreateUser),
     fork(watchUpdateUser),
-    fork(watchDeleteUser    ),
+    fork(watchDeleteUser),
     fork(watchLoginUser),
   ])
 }

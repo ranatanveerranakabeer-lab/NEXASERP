@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react'
+import React, { useEffect, useRef, useMemo } from 'react'
 import {
   CCard,
   CCardBody,
@@ -16,164 +16,108 @@ import {
   CAvatar,
 } from '@coreui/react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useFormik } from 'formik'
 import { getProfile, getCompany, saveCompany, saveProfile } from '../../redux/slice/companySlice'
 import AppButton from '../../components/common/AppButton'
 
 const CompanySetting = () => {
   const dispatch = useDispatch()
-
   const { company, profile, isLoading } = useSelector((state) => state.companies)
-
   const fileInputRef = useRef(null)
-
-  const [activeKey, setActiveKey] = useState(1)
-
+  const [activeKey, setActiveKey] = React.useState(1)
   const BASE_URL = 'https://localhost:7016'
 
-  const [profileData, setProfileData] = useState({
-    id: 0,
-    name: '',
-    email: '',
-    phoneNumber: '',
-    profilePictureUrl: '',
-    imageFile: null,
-    companyId: 0,
-  })
-
-  const [companyData, setCompanyData] = useState({
-    id: 0,
-    tenantId: 0,
-    companyName: '',
-    address: '',
-    phone: '',
-  })
-
-  // Data Fetching
+  // Fetch Data on Load
   useEffect(() => {
-    const userStr = localStorage.getItem('user')
-    if (userStr) {
-      const currentUser = JSON.parse(userStr)
-
-      const uid = currentUser?.userId || currentUser?.id
-      const companyId = currentUser?.companyId
-
-      if (uid) dispatch(getProfile(uid))
-      if (companyId) dispatch(getCompany(companyId))
-    }
+    const user = JSON.parse(localStorage.getItem('user'))
+    if (user?.userId || user?.id) dispatch(getProfile(user.userId || user.id))
+    if (user?.companyId) dispatch(getCompany(user.companyId))
   }, [dispatch])
 
-  // Profile Sync
-  useEffect(() => {
-    if (profile) {
-      setProfileData((prev) => ({
-        ...prev,
-        id: profile.id || profile.userId || profile.Id || 0,
-        name: profile.name || profile.Name || '',
-        email: profile.email || profile.Email || '',
-        phoneNumber: profile.phoneNumber || profile.PhoneNumber || '',
-        profilePictureUrl: profile.profilePictureUrl || profile.ProfilePictureUrl || '',
-        companyId: profile.companyId || profile.CompanyId || 0,
-      }))
-    }
-  }, [profile])
-
-  // Company Sync
-  useEffect(() => {
-    if (company) {
-      const data = company.data || company
-      setCompanyData({
-        id: data.Id || data.id || 0,
-        tenantId: data.TenantId || data.tenantId || 0,
-        companyName: data.CompanyName || data.companyName || '',
-        address: data.Address || data.address || '',
-        phone: data.Phone || data.phone || '',
+  // --- PROFILE FORM (FORMIK) ---
+  const profileForm = useFormik({
+    enableReinitialize: true,
+    initialValues: {
+      id: profile?.id || profile?.userId || 0,
+      name: profile?.name || '',
+      email: profile?.email || '',
+      phoneNumber: profile?.phoneNumber || '',
+      profilePictureUrl: profile?.profilePictureUrl || '',
+      companyId: profile?.companyId || 0,
+      imageFile: null, // For new upload
+    },
+    onSubmit: (values) => {
+      const formData = new FormData()
+      Object.keys(values).forEach((key) => {
+        if (key === 'imageFile' && values[key]) {
+          formData.append('ProfileImage', values[key])
+        } else if (values[key] !== null) {
+          formData.append(key.charAt(0).toUpperCase() + key.slice(1), values[key])
+        }
       })
-    }
-  }, [company])
+      dispatch(saveProfile(formData))
+    },
+  })
 
-  // Avatar
+  // --- COMPANY FORM (FORMIK) ---
+  const companyForm = useFormik({
+    enableReinitialize: true,
+    initialValues: {
+      id: company?.id || 0,
+      tenantId: company?.tenantId || 0,
+      companyName: company?.companyName || '',
+      address: company?.address || '',
+      phone: company?.phone || '',
+    },
+    onSubmit: (values) => {
+      dispatch(
+        saveCompany({
+          Id: values.id,
+          CompanyName: values.companyName,
+          Address: values.address,
+          TenantId: values.tenantId,
+          Phone: values.phone,
+        }),
+      )
+    },
+  })
+
+  // Memoized Avatar Logic
   const avatarImage = useMemo(() => {
-    if (profileData.imageFile) {
-      return URL.createObjectURL(profileData.imageFile)
-    }
-    if (profileData.profilePictureUrl) {
-      const path = profileData.profilePictureUrl.startsWith('/')
-        ? profileData.profilePictureUrl
-        : `/${profileData.profilePictureUrl}`
+    if (profileForm.values.imageFile) return URL.createObjectURL(profileForm.values.imageFile)
+    if (profileForm.values.profilePictureUrl) {
+      const path = profileForm.values.profilePictureUrl.startsWith('/')
+        ? profileForm.values.profilePictureUrl
+        : `/${profileForm.values.profilePictureUrl}`
       return `${BASE_URL}${path}`
     }
     return 'https://via.placeholder.com/150'
-  }, [profileData.imageFile, profileData.profilePictureUrl])
-
-  const onUpdateProfile = () => {
-    const formData = new FormData()
-
-    formData.append('Id', profileData.id)
-    formData.append('Name', profileData.name)
-    formData.append('Email', profileData.email)
-    formData.append('PhoneNumber', profileData.phoneNumber || '')
-    formData.append('EmployeeId', profileData.employeeId || 0)
-    formData.append('CompanyId', profileData.companyId)
-    formData.append('WebsiteUrl', profileData.websiteUrl || '')
-
-    if (profileData.imageFile) {
-      formData.append('ProfileImage', profileData.imageFile) // 👈 Matches UserRequestDto
-    }
-
-    dispatch(saveProfile(formData))
-  }
-
-  const onUpdateCompany = () => {
-    dispatch(
-      saveCompany({
-        Id: companyData.id,
-        CompanyName: companyData.companyName,
-        Address: companyData.address,
-        TenantId: companyData.tenantId,
-        Phone: companyData.phone,
-      }),
-    )
-  }
+  }, [profileForm.values.imageFile, profileForm.values.profilePictureUrl])
 
   return (
     <CContainer fluid className="px-4 mt-2">
       <h4 className="fw-bold mb-4">Settings</h4>
-
-      <CCard className="border-0 shadow-sm overflow-hidden">
+      <CCard className="border-0 shadow-sm">
         <CCardBody className="p-0">
           <CRow className="g-0" style={{ minHeight: '500px' }}>
-            {/* LEFT SIDE */}
+            {/* Sidebar */}
             <CCol md={3} className="border-end bg-light p-4 text-center">
               <CAvatar
                 src={avatarImage}
                 size="xl"
-                style={{
-                  width: '120px',
-                  height: '120px',
-                  objectFit: 'cover',
-                  cursor: 'pointer',
-                }}
+                className="mb-3"
+                style={{ width: '120px', height: '120px', cursor: 'pointer' }}
                 onClick={() => fileInputRef.current.click()}
               />
-
               <input
                 type="file"
                 ref={fileInputRef}
                 hidden
                 accept="image/*"
-                onChange={(e) => {
-                  if (e.target.files[0]) {
-                    setProfileData({
-                      ...profileData,
-                      imageFile: e.target.files[0],
-                    })
-                  }
-                }}
+                onChange={(e) => profileForm.setFieldValue('imageFile', e.target.files[0])}
               />
-
-              <h6 className="fw-bold mt-3">{profileData.name || 'User'}</h6>
-
-              <CNav variant="pills" className="flex-column gap-2 text-start mt-4">
+              <h6 className="fw-bold">{profileForm.values.name || 'User'}</h6>
+              <CNav variant="pills" className="flex-column gap-2 mt-4 text-start">
                 <CNavItem>
                   <CNavLink active={activeKey === 1} onClick={() => setActiveKey(1)}>
                     Profile
@@ -187,7 +131,7 @@ const CompanySetting = () => {
               </CNav>
             </CCol>
 
-            {/* RIGHT SIDE */}
+            {/* Form Content */}
             <CCol md={9} className="p-4">
               {isLoading ? (
                 <div className="text-center py-5">
@@ -195,49 +139,52 @@ const CompanySetting = () => {
                 </div>
               ) : (
                 <CTabContent>
-                  {/* PROFILE */}
+                  {/* Profile Tab */}
                   <CTabPane visible={activeKey === 1}>
-                    <h5>Profile</h5>
-                    <AppButton onClick={onUpdateProfile}>Update</AppButton>
-
+                    <div className="d-flex justify-content-between align-items-center mb-3">
+                      <h5>Profile</h5>
+                      <AppButton onClick={profileForm.handleSubmit}>Update Profile</AppButton>
+                    </div>
                     <CForm>
                       <CFormInput
                         label="Name"
-                        value={profileData.name}
-                        onChange={(e) => setProfileData({ ...profileData, name: e.target.value })}
+                        name="name"
+                        value={profileForm.values.name}
+                        onChange={profileForm.handleChange}
                       />
                       <CFormInput
                         label="Email"
-                        value={profileData.email}
-                        onChange={(e) => setProfileData({ ...profileData, email: e.target.value })}
+                        name="email"
+                        value={profileForm.values.email}
+                        onChange={profileForm.handleChange}
                       />
                     </CForm>
                   </CTabPane>
 
-                  {/* COMPANY */}
+                  {/* Company Tab */}
                   <CTabPane visible={activeKey === 2}>
-                    <h5>Company</h5>
-                    <AppButton onClick={onUpdateCompany}>Save</AppButton>
-
+                    <div className="d-flex justify-content-between align-items-center mb-3">
+                      <h5>Company Details</h5>
+                      <AppButton onClick={companyForm.handleSubmit}>Save Company</AppButton>
+                    </div>
                     <CForm>
                       <CFormInput
                         label="Company Name"
-                        value={companyData.companyName}
-                        onChange={(e) =>
-                          setCompanyData({ ...companyData, companyName: e.target.value })
-                        }
+                        name="companyName"
+                        value={companyForm.values.companyName}
+                        onChange={companyForm.handleChange}
                       />
                       <CFormInput
                         label="Address"
-                        value={companyData.address}
-                        onChange={(e) =>
-                          setCompanyData({ ...companyData, address: e.target.value })
-                        }
+                        name="address"
+                        value={companyForm.values.address}
+                        onChange={companyForm.handleChange}
                       />
                       <CFormInput
                         label="Phone"
-                        value={companyData.phone}
-                        onChange={(e) => setCompanyData({ ...companyData, phone: e.target.value })}
+                        name="phone"
+                        value={companyForm.values.phone}
+                        onChange={companyForm.handleChange}
                       />
                     </CForm>
                   </CTabPane>

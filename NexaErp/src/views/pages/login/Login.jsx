@@ -1,123 +1,139 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import {
-  CButton, CCard, CCardBody, CCardGroup, CCol, CContainer,
-  CForm, CFormInput, CFormSelect, CInputGroup, CInputGroupText, CRow
-} from '@coreui/react'
+import { CButton, CFormInput, CSpinner } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { cilLockLocked, cilUser, cilHome } from '@coreui/icons'
-
+import { cilLockLocked, cilUser, cilHome, cilChevronBottom } from '@coreui/icons'
+import { useToast } from '../../../components/common/ToastContext'
 import { getAllTenants } from '../../../redux/slice/tenantSlice'
+import { resetError } from '../../../redux/slice/userSlice' //
+import '../../../scss/Login.scss'
 
 const Login = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const { addToast } = useToast()
 
-  // Tenants ka data tenantSlice se lein aur loading status userSlice se
   const tenants = useSelector((state) => state.tenants?.result || [])
-  const { isLoading, currentUser } = useSelector((state) => state.users)
+  const { isLoading, currentUser, error } = useSelector((state) => state.users) //
 
-  const [loginData, setLoginData] = useState({
-    email: '',
-    password: '',
-    tenantId: 0
-  })
+  const [isOpen, setIsOpen] = useState(false)
+  const [selectedTenant, setSelectedTenant] = useState({ id: 0, name: 'Select Tenant / Company' })
+  const [loginData, setLoginData] = useState({ email: '', password: '', tenantId: 0 })
 
-  // Page load hote hi tenants fetch karein
   useEffect(() => {
     dispatch(getAllTenants())
   }, [dispatch])
-useEffect(() => {
-  if (currentUser) {
-    navigate('/dashboard') // ya '/dashboard'
-  }
-}, [currentUser, navigate])
-  const handleLogin = (e) => {
-    e.preventDefault()
+
+  useEffect(() => {
+    if (currentUser) {
+      addToast('Success', 'Welcome to NexaErp!', 'success')
+      navigate('/dashboard')
+    }
+  }, [currentUser, navigate, addToast])
+
+  useEffect(() => {
+    if (error) {
+      addToast('Login Failed', error, 'error')
+      dispatch(resetError())
+    }
+  }, [error, dispatch, addToast])
+
+  const handleLogin = () => {
     if (loginData.tenantId === 0) {
-      alert("Please select a Tenant")
+      addToast('Required', 'Please select a company first', 'warning')
       return
     }
-    // Login trigger
+    if (!loginData.email || !loginData.password) {
+      addToast('Required', 'Please enter email and password', 'warning')
+      return
+    }
     dispatch({ type: 'users/loginUser', payload: loginData })
   }
 
   return (
-    <div className="bg-body-tertiary min-vh-100 d-flex flex-row align-items-center">
-      <CContainer>
-        <CRow className="justify-content-center">
-          <CCol md={8}>
-            <CCardGroup>
-              <CCard className="p-4">
-                <CCardBody>
-                  <CForm onSubmit={handleLogin}>
-                    <h1>Login</h1>
-                    <p className="text-body-secondary">Sign In to your account</p>
-                    
-                    {/* Tenant Dropdown (Using data from tenantSlice) */}
-                    <CInputGroup className="mb-3">
-                      <CInputGroupText><CIcon icon={cilHome} /></CInputGroupText>
-                      <CFormSelect 
-                        value={loginData.tenantId}
-                        onChange={(e) => setLoginData({...loginData, tenantId: parseInt(e.target.value)})}
-                        style={{ border: '1px solid #6f42c1', boxShadow: 'none' }}
-                      >
-                        <option value="0">Select Tenant</option>
-                        {tenants.map((t) => (
-                          <option key={t.id} value={t.id}>
-                            {t.name}
-                          </option>
-                        ))}
-                      </CFormSelect>
-                    </CInputGroup>
+    <div className="login-container">
+      <div className="login-card-group">
+        <div className="form-section">
+          <h1>Welcome to Nexa</h1>
+          <p className="text-muted small mb-4">Enter credentials to access account</p>
 
-                    {/* Email Input */}
-                    <CInputGroup className="mb-3">
-                      <CInputGroupText><CIcon icon={cilUser} /></CInputGroupText>
-                      <CFormInput 
-                        placeholder="Email" 
-                        style={{ border: '1px solid #6f42c1', boxShadow: 'none' }}
-                        value={loginData.email}
-                        onChange={(e) => setLoginData({...loginData, email: e.target.value})}
-                      />
-                    </CInputGroup>
+          {/* Custom Dropdown */}
+          <div className="custom-select-wrapper">
+            <div className="input-group-custom" onClick={() => setIsOpen(!isOpen)}>
+              <div className="input-group-text">
+                <CIcon icon={cilHome} />
+              </div>
+              <div className="selected-value">
+                {selectedTenant.name}
+                <CIcon icon={cilChevronBottom} size="sm" />
+              </div>
+            </div>
+            {isOpen && (
+              <ul className="custom-options-list">
+                {tenants.map((t) => (
+                  <li
+                    key={t.id}
+                    onClick={() => {
+                      setSelectedTenant({ id: t.id, name: t.name })
+                      setLoginData({ ...loginData, tenantId: t.id })
+                      setIsOpen(false)
+                    }}
+                  >
+                    {t.name}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
 
-                    {/* Password Input */}
-                    <CInputGroup className="mb-4">
-                      <CInputGroupText><CIcon icon={cilLockLocked} /></CInputGroupText>
-                      <CFormInput
-                        type="password"
-                        placeholder="Password"
-                        style={{ border: '1px solid #6f42c1', boxShadow: 'none' }}
-                        value={loginData.password}
-                        onChange={(e) => setLoginData({...loginData, password: e.target.value})}
-                      />
-                    </CInputGroup>
+          <div className="standard-input-group">
+            <div className="input-group-text">
+              <CIcon icon={cilUser} />
+            </div>
+            <CFormInput
+              placeholder="Email Address"
+              value={loginData.email}
+              onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
+              onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
+            />
+          </div>
 
-                    <CRow>
-                      <CCol xs={6}>
-                        <CButton color="primary" className="px-4" type="submit" disabled={isLoading}>
-                          {isLoading ? 'Processing...' : 'Login'}
-                        </CButton>
-                      </CCol>
-                    </CRow>
-                  </CForm>
-                </CCardBody>
-              </CCard>
-              
-              <CCard className="text-white bg-primary py-5" style={{ width: '44%' }}>
-                <CCardBody className="text-center">
-                  <div>
-                    <h2>ERP Softify</h2>
-                    <p>Manage your business operations efficiently with our secure POS and Inventory system.</p>
-                  </div>
-                </CCardBody>
-              </CCard>
-            </CCardGroup>
-          </CCol>
-        </CRow>
-      </CContainer>
+          <div className="standard-input-group">
+            <div className="input-group-text">
+              <CIcon icon={cilLockLocked} />
+            </div>
+            <CFormInput
+              type="password"
+              placeholder="Password"
+              value={loginData.password}
+              onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
+              onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
+            />
+          </div>
+
+          <CButton
+            className="btn-access w-100"
+            onClick={handleLogin}
+            disabled={isLoading}
+            style={{ position: 'relative', zIndex: 5 }}
+          >
+            {isLoading ? <CSpinner size="sm" /> : 'ACCESS ACCOUNT'}
+          </CButton>
+        </div>
+
+        <div className="banner-section">
+          <div className="icon-circle">
+            <CIcon icon={cilHome} size="xl" />
+          </div>
+          <h2 className="fw-bold">NexaErp</h2>
+          <p className="small opacity-75 px-4">Professional Cloud ERP Management.</p>
+          <div className="footer-credits">
+            <p className="mb-0 opacity-50">Product by</p>
+            <p className="mb-0 opacity-50">Rana Tanveer & Sidra Tahir</p>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

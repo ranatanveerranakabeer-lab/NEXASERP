@@ -1,10 +1,11 @@
 ﻿// DomainLayer/Entities/Branch.cs
+using ERPSoftifyApplicatione.ApplicationLayer.Interface;
 using System;
 using System.Collections.Generic;
 
 namespace ERPSoftifyApplication.DomainLayer.Entities
 {
-    public class Branch
+    public class Branch: IMustHaveTenant
     {
         public int Id { get; set; }
         public int TenantId { get; set; }

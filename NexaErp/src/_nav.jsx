@@ -9,8 +9,7 @@
  *
  * @module _nav
  */
-// _nav.js mein ye line likhen
-import { useAppLanguage } from "./components/common/LanguageContext";
+//import { useAppLanguage } from "../components/common/LanguageContext";
 import React from 'react'
 import CIcon from '@coreui/icons-react'
 import { cilSettings, cilUser } from '@coreui/icons'
@@ -76,35 +75,35 @@ import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
  *   name: 'Theme',
  * }
  */
- const { l } = useAppLanguage();
+ //const { l } = useAppLanguage();
 const _nav = [
   {
     component: CNavItem,
-    name: l('Dashboard'),
+    name: 'Dashboard',
     to: '/dashboard',
     icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
     badge: {
       color: 'info',
-      text: l('new'),
+      text: 'NEW',
     },
   },
   {
     component: CNavTitle,
-    name: l('Setups'),
+    name: 'Setups',
   },
   {
     component: CNavGroup,
-    name: l('Setups'),
+    name: 'Setups',
     icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
-        name: l('Users'),
+        name: 'Users',
         to: '/setups/users',
       },
       {
         component: CNavItem,
-        name: l('Roles'),
+        name: 'Roles',
         to: '/setups/roles',
       },
       {
@@ -116,6 +115,11 @@ const _nav = [
         component: CNavItem,
         name: 'Tenants',
         to: '/setups/tenants',
+      },
+         {
+        component: CNavItem,
+        name: 'CompanySetting',
+        to: '/setups/companySetting',
       },
       {
         component: CNavItem,

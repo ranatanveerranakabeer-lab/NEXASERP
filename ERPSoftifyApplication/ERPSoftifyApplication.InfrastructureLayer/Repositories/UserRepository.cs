@@ -25,25 +25,23 @@ namespace ERPSoftifyApplication.InfrastructureLayer.Repositories
             return user;
         }
 
-        // ✅ GET BY ID (Tenant Filter)
+
         public async Task<User?> GetByIdAsync(int id, CancellationToken cancellationToken)
         {
             return await _context.Users
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.ID == id, cancellationToken);
-            // 🔥 NOTE: Tenant filter service layer me lagana better hai
         }
-
-        // ✅ GET ALL USERS (Tenant Based)
         public async Task<List<User>> GetAllAsync(CancellationToken cancellationToken)
         {
-            return await _context.Users
+            var userlist= await _context.Users.IgnoreQueryFilters()
                 .AsNoTracking()
                 .Include(x => x.Role)
                 .Include(x => x.Company)
                 .Include(x => x.Tenant)
                 .Include(x => x.Branch)
                 .ToListAsync(cancellationToken);
+            return userlist;
         }
         public async Task<List<User>> GetByTenantAsync(int tenantId, CancellationToken cancellationToken)
         {
@@ -53,7 +51,6 @@ namespace ERPSoftifyApplication.InfrastructureLayer.Repositories
                 .ToListAsync(cancellationToken);
         }
 
-        // ✅ UPDATE USER (Tenant Safe)
         public async Task<User> UpdateAsync(User user, CancellationToken cancellationToken)
         {
             _context.Users.Update(user);
@@ -61,7 +58,6 @@ namespace ERPSoftifyApplication.InfrastructureLayer.Repositories
             return user;
         }
 
-        // ✅ DELETE USER
         public async Task<bool> DeleteAsync(int id, CancellationToken cancellationToken)
         {
             var user = await _context.Users
@@ -85,7 +81,12 @@ namespace ERPSoftifyApplication.InfrastructureLayer.Repositories
         public async Task<User?> GetByLoginAsync(string email, int tenantId, CancellationToken cancellationToken)
         {
             return await _context.Users
-                .FirstOrDefaultAsync(x => x.Email == email && x.TenantId == tenantId, cancellationToken);
+        .IgnoreQueryFilters()
+        .AsNoTracking()
+        .FirstOrDefaultAsync(x =>
+            x.Email == email &&
+            x.TenantId == tenantId,
+            cancellationToken);
         }
 
         // ❌ OLD METHOD REMOVE KAR DO (confusion create karta hai)

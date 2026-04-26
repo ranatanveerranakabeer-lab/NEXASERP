@@ -1579,6 +1579,7 @@
         "dependencies": {
           "BCrypt.Net-Next": "4.1.0",
           "ERPSoftifyApplication.DomainLayer": "1.0.0",
+          "ERPSoftifyApplicatione.ApplicationLayer": "1.0.0",
           "Microsoft.EntityFrameworkCore": "8.0.0",
           "Microsoft.EntityFrameworkCore.SqlServer": "8.0.0"
         },

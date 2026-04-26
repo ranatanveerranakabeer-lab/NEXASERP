@@ -34,3 +34,5 @@ C:\NEXSERP\ERPSoftifyApplication\ERPSoftifyApplication.InfrastructureLayer\obj\D
 C:\NEXSERP\ERPSoftifyApplication\ERPSoftifyApplication.InfrastructureLayer\obj\Debug\net8.0\ERPSoftifyApplication.InfrastructureLayer.pdb
 C:\NEXSERP\ERPSoftifyApplication\ERPSoftifyApplication.InfrastructureLayer\obj\Debug\net8.0\ERPSoftifyApplication.InfrastructureLayer.genruntimeconfig.cache
 C:\NEXSERP\ERPSoftifyApplication\ERPSoftifyApplication.InfrastructureLayer\obj\Debug\net8.0\ref\ERPSoftifyApplication.InfrastructureLayer.dll
+C:\NEXSERP\ERPSoftifyApplication\ERPSoftifyApplication.InfrastructureLayer\bin\Debug\net8.0\ERPSoftifyApplicatione.ApplicationLayer.dll
+C:\NEXSERP\ERPSoftifyApplication\ERPSoftifyApplication.InfrastructureLayer\bin\Debug\net8.0\ERPSoftifyApplicatione.ApplicationLayer.pdb

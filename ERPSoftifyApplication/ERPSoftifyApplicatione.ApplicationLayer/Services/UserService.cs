@@ -20,17 +20,19 @@ namespace ERPSoftifyApplicatione.ApplicationLayer.Services
     {
         private readonly IUserInterface _UserRepository;
         private readonly ITenantInterface _tenantsRepository;
+        private readonly ICurrentUserService _currentUserService;
         private readonly IBranchInterface _branchRepository;
         private readonly ICompanySettingInterface _companyRepository;
         private readonly string _jwtSecret;
 
-        public UserService(IUserInterface userRepository, IConfiguration configuration, ITenantInterface tenantInterface, IBranchInterface branchInterface, ICompanySettingInterface companyRepository)
+        public UserService(IUserInterface userRepository, IConfiguration configuration, ITenantInterface tenantInterface, IBranchInterface branchInterface, ICompanySettingInterface companyRepository, ICurrentUserService currentUserService)
         {
             _UserRepository = userRepository;
             _tenantsRepository = tenantInterface;
             _branchRepository = branchInterface;
             _jwtSecret = configuration["Jwt:Key"] ?? "DefaultSuperSecretKey123";
             _companyRepository = companyRepository;
+            _currentUserService = currentUserService;
         }
 
         #region Create User
@@ -237,39 +239,41 @@ namespace ERPSoftifyApplicatione.ApplicationLayer.Services
         #region Login
         public async Task<ResponseDataModel<LoginResponseDto>> LoginAsync(LoginDto dto, CancellationToken cancellationToken)
         {
-            var user = await _UserRepository.GetAllAsync(cancellationToken);
-            if (user == null || !user.Any())
-                return ResponseDataModel<LoginResponseDto>.FailureResponse("No users found");
-            var matchedUser = user.FirstOrDefault(x =>
-                x.Email == dto.Email &&
-                x.TenantId == dto.TenantId 
-            );
-
-            if (matchedUser == null)
-                return ResponseDataModel<LoginResponseDto>.FailureResponse("Invalid credentials");
-
-            if (string.IsNullOrEmpty(matchedUser.PasswordHash))
-                return ResponseDataModel<LoginResponseDto>.FailureResponse("Password not set");
-
-            if (!BCrypt.Net.BCrypt.Verify(dto.Password, matchedUser.PasswordHash))
-                return ResponseDataModel<LoginResponseDto>.FailureResponse("Invalid credentials");
-
-            if (!matchedUser.IsActive)
-                return ResponseDataModel<LoginResponseDto>.FailureResponse("User inactive");
-
-            var token = GenerateJwtToken(matchedUser);
-
-            var response = new LoginResponseDto
+            try
             {
-                UserId = matchedUser.ID,
-                Name = matchedUser.Name,
-                RoleId = matchedUser.RoleId,
-                Token = token,
-                TenantId = matchedUser.TenantId,
-                CompanyId=matchedUser.CompanyId,
-            };
+                var matchedUser = await _UserRepository.GetByLoginAsync(dto.Email, dto.TenantId, cancellationToken);
 
-            return ResponseDataModel<LoginResponseDto>.SuccessResponse(response, "Login successful");
+                if (matchedUser == null)
+                    return ResponseDataModel<LoginResponseDto>.FailureResponse("Invalid credentials");
+
+                if (string.IsNullOrEmpty(matchedUser.PasswordHash))
+                    return ResponseDataModel<LoginResponseDto>.FailureResponse("Password not set");
+
+                if (!BCrypt.Net.BCrypt.Verify(dto.Password, matchedUser.PasswordHash))
+                    return ResponseDataModel<LoginResponseDto>.FailureResponse("Invalid credentials");
+
+                if (!matchedUser.IsActive)
+                    return ResponseDataModel<LoginResponseDto>.FailureResponse("User inactive");
+
+                var token = GenerateJwtToken(matchedUser);
+
+                var response = new LoginResponseDto
+                {
+                    UserId = matchedUser.ID,
+                    Name = matchedUser.Name,
+                    RoleId = matchedUser.RoleId,
+                    Token = token,
+                    TenantId = matchedUser.TenantId,
+                    CompanyId = matchedUser.CompanyId,
+                };
+
+                return ResponseDataModel<LoginResponseDto>.SuccessResponse(response, "Login successful");
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         }
 
         private string GenerateJwtToken(User user)
@@ -359,26 +363,30 @@ namespace ERPSoftifyApplicatione.ApplicationLayer.Services
         #region Get All Users
         public async Task<ResponseDataModel<List<UserDto>>> GetAllUsersAsync(CancellationToken cancellationToken)
         {
+            var currentTenantId = _currentUserService.TenantId;
             var users = await _UserRepository.GetAllAsync(cancellationToken);
-            if (users == null || !users.Any())
+            var filteredUsers = users.Where(u => u.TenantId == currentTenantId).ToList();
+
+            if (!filteredUsers.Any())
                 return ResponseDataModel<List<UserDto>>.SuccessResponse(new List<UserDto>());
-            var dtoList = users.Select(u => new UserDto
+
+            var dtoList = filteredUsers.Select(u => new UserDto
             {
                 Id = u.ID,
                 Name = u.Name,
                 UserName = u.Name,
                 Email = u.Email,
-                RoleId = u.RoleId, // Ensure ye mojud ho
-                TenantId = u.TenantId,   // <-- Ye ADD karein
-                BranchId = u.BranchId,   // <-- Ye ADD karein
-                CompanyId = u.CompanyId, // <-- Ye ADD karein
-                TenantName = u.Tenant.Name,
-                BranchName = u.Branch.Name,
-                RoleName = u.Role.RoleName,
-                CompanyName = u.Company.CompanyName,
+                RoleId = u.RoleId,
+                TenantId = u.TenantId,
+                BranchId = u.BranchId,
+                CompanyId = u.CompanyId,
+                // ?. use karein taake null hone par crash na ho
+                TenantName = u.Tenant?.Name ?? "N/A",
+                BranchName = u.Branch?.Name ?? "N/A",
+                RoleName = u.Role?.RoleName ?? "N/A",
+                CompanyName = u.Company?.CompanyName ?? "N/A",
                 PhoneNumber = u.PhoneNumber,
-                Status=u.Status,
-                // ... baqi fields
+                Status = u.Status
             }).ToList();
 
             return ResponseDataModel<List<UserDto>>.SuccessResponse(dtoList);

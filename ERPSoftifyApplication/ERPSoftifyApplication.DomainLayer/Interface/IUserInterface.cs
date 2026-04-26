@@ -18,7 +18,7 @@ namespace ERPSoftifyApplication.DomainLayer.Interface
         Task<User> UpdateAsync(User User, CancellationToken cancellationToken);
 
         Task<bool> DeleteAsync(int id, CancellationToken cancellationToken);
-
+        Task<User?> GetByLoginAsync(string email, int tenantId, CancellationToken cancellationToken);
         // Extra Enterprise Methods
         Task<User?> GetByUserNameAsync(string Email, CancellationToken cancellationToken);
         Task<bool> UpdatePasswordAsync(int userId, string passwordHash, CancellationToken cancellationToken);

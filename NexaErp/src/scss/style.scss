@@ -6,37 +6,38 @@
 
 body {
   background-color: var(--cui-tertiary-bg);
+  top: 0 !important;
+    position: static !important;
+    min-height: 100vh !important;
 }
 /* =========================
     GLOBAL UI COLOR UNIFICATION
    ========================= */
 
 :root {
-  // Jo color aap chahte hain (e.g., Pure White ya Light Grey)
   --my-custom-bg: #ffffff; 
 }
 
-// 1. Header ka background
 .header {
   --cui-header-bg: var(--my-custom-bg) !important;
   background-color: var(--my-custom-bg) !important;
   border-bottom: 1px solid var(--cui-border-color-translucent);
 }
 
-// 2. Footer ka background
+
 .footer {
   --cui-footer-bg: var(--my-custom-bg) !important;
   background-color: var(--my-custom-bg) !important;
 }
 
-// 3. Card aur Card Body ka background
+
 .card {
   --cui-card-bg: var(--my-custom-bg) !important;
   background-color: var(--my-custom-bg) !important;
   border: 1px solid var(--cui-border-color-translucent);
   
   .card-header, .card-body, .card-footer {
-    background-color: transparent !important; // Taake card ka main bg hi nazar aaye
+    background-color: transparent !important; 
   }
 }
 /* =============================================================
@@ -45,7 +46,6 @@ body {
 
 .modern-grey-modal {
   .modal-content {
-    // Body ka wahi color jo backdrop ka hota hai
     background-color: #f8f9fa !important; 
     border-radius: 16px !important;
     border: 1px solid rgba(0,0,0,0.05) !important;
@@ -66,18 +66,16 @@ body {
     padding: 2rem !important;
   }
 
-  // Inputs ko background ke sath blend karne ke liye logic
   .form-control, .form-select {
     background-color: rgba(255, 255, 255, 0.6) !important; // Halka transparent white
     border: 1.5px solid #e0e2e6 !important;
     color: #3c4b64 !important;
-    height: calc(3rem + 2px); // Thora bulky aur modern height
+    height: calc(3rem + 2px); 
     
     &::placeholder {
       color: #a1a1a1 !important;
     }
 
-    // Hover par bilkul minor change
     &:hover {
       border-color: #d1d4d7 !important;
     }
@@ -90,7 +88,7 @@ body {
     }
   }
 
-  // Labels ko subtle rakhein
+
   .form-label {
     color: #636f83 !important;
     font-weight: 600;
@@ -106,7 +104,6 @@ body {
   }
 }
 
-// Global button tweak for Dubai Style (Rounded & Shadow)
 .btn-primary {
   border-radius: 8px !important;
   font-weight: 600 !important;
@@ -234,7 +231,7 @@ body {
 
   .permissions-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); // 3 columns as per image
+    grid-template-columns: repeat(3, 1fr);
     gap: 10px 20px;
   }
 
@@ -262,10 +259,10 @@ body {
   }
 
   .btn-save-custom {
-    background-color: #802060; // Bordole button
+    background-color: #802060; 
     color: white;
     border: none;
-    border-radius: 20px; // Rounded buttons like image
+    border-radius: 20px; 
     padding: 6px 25px;
     
     &:hover {
@@ -274,7 +271,7 @@ body {
     }
   }
 }
-// 4. Page background (jis par card show ho raha hai)
+
 body {
   background-color: var(--my-custom-bg) !important;
 }
@@ -287,7 +284,7 @@ body {
 
 .header > .container-fluid,
 .sidebar-header {
-  min-height: calc(4rem + 1px); // stylelint-disable-line function-disallowed-list
+  min-height: calc(4rem + 1px); 
 }
 
 .sidebar-brand-full {
@@ -303,7 +300,7 @@ body {
   .nav-link {
     display: flex;
     align-items: center;
-    min-height: calc(4rem + 1px); // stylelint-disable-line function-disallowed-list
+    min-height: calc(4rem + 1px); 
   }
 }
 
@@ -367,7 +364,7 @@ body {
     --cui-footer-bg: var(--cui-body-bg);
   }
 }
-/* 🔥 FORCE THEME OVERRIDE */
+
 
 :root {
   --cui-primary: var(--dynamic-primary) !important;
@@ -392,4 +389,50 @@ body {
 /* ACTIVE LINKS */
 .nav-link.active {
   color: var(--cui-primary) !important;
+}
+
+.goog-te-banner-frame.skiptranslate, 
+.goog-te-banner-frame {
+    display: none !important;
+}
+
+
+body {
+    top: 0px !important;
+}
+
+
+#goog-gt-tt, 
+.goog-te-balloon-frame,
+.goog-te-balloon-frame-main {
+    display: none !important;
+}
+
+
+.goog-text-highlight {
+    background: none !important;
+    box-shadow: none !important;
+}
+
+
+.goog-te-menu-value span {
+    color: transparent !important;
+}
+
+.goog-te-banner-frame.skiptranslate {
+    display: none !important;
+}
+
+body {
+    top: 0px !important; 
+}
+
+
+#goog-gt-tt {
+    display: none !important;
+    visibility: hidden !important;
+}
+
+.goog-te-balloon-frame {
+    display: none !important;
 }

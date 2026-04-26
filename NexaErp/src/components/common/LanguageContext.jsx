@@ -1,23 +1,31 @@
-import React, { createContext, useContext } from 'react';
-import { useTranslation } from 'react-i18next';
+import React, { createContext, useContext } from 'react'
+import { useTranslation } from 'react-i18next'
 
-const LanguageContext = createContext();
+const LanguageContext = createContext()
 
 export const LanguageProvider = ({ children }) => {
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation()
 
-  const l = (key) => {
-    if (!key) return '';
-    // Agar string hy to {{}} nikaal dega, warna direct key translate karega
-    const cleanKey = typeof key === 'string' ? key.replace(/\{\{|\}\}/g, '').trim() : key;
-    return t(cleanKey);
-  };
+  const changeLanguage = (lang) => {
+    // 1. Pehle React ka layout badlo (RTL/LTR ke liye)
+    i18n.changeLanguage(lang)
+
+    // 2. Phir Google Translate widget ko trigger karo (Poora page translate karne ke liye)
+    const googleCombo = document.querySelector('.goog-te-combo')
+    if (googleCombo) {
+      googleCombo.value = lang
+      googleCombo.dispatchEvent(new Event('change'))
+    }
+  }
+
+  // l() function ab simple rakhein, machine khud handle karegi
+  const l = (text) => text
 
   return (
-    <LanguageContext.Provider value={{ l, t, i18n }}>
+    <LanguageContext.Provider value={{ l, i18n, changeLanguage }}>
       {children}
     </LanguageContext.Provider>
-  );
-};
+  )
+}
 
-export const useAppLanguage = () => useContext(LanguageContext);
+export const useAppLanguage = () => useContext(LanguageContext)

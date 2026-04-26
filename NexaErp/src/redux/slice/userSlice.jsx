@@ -12,6 +12,22 @@ const userSlice = createSlice({
   name: 'users',
   initialState,
   reducers: {
+    loginRequest: (state) => {
+      state.isLoading = true
+      state.error = null // Naya login shuru hote hi purana error saaf
+    },
+    loginSuccess: (state, action) => {
+      state.isLoading = false
+      state.currentUser = action.payload
+      state.error = null
+    },
+    loginFailure: (state, action) => {
+      state.isLoading = false
+      state.error = action.payload // Yahan error message save hota hai
+    },
+    resetError: (state) => {
+      state.error = null
+    },
     loginUser: (state) => {
       state.isLoading = true
     },
@@ -37,7 +53,11 @@ const userSlice = createSlice({
     setUser: (state) => {
       state.isLoading = true
     },
-
+    logout: (state) => {
+      state.currentUser = null
+      state.error = null
+      state.isLoading = false
+    },
     setAllUsers: (state, action) => {
       state.result = action.payload || []
       state.isLoading = false
@@ -68,6 +88,10 @@ export const {
   getAllUsers,
   setAllUsers,
   setSelectedUser,
+  loginRequest,
+  loginFailure,
+  resetError,
+  loginSuccess,
   createUser,
   updateUser,
   setUser,
@@ -77,8 +101,8 @@ export const {
   deleteUserCompleted,
   setIsLoading,
   loginUser,
-  loginSuccess,
   setTenantsForLogin,
+  logout,
 } = userSlice.actions
 
 export default userSlice.reducer

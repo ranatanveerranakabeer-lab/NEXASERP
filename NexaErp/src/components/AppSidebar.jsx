@@ -9,17 +9,33 @@ import {
   CSidebarToggler,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-
+import {
+  cilBell,
+  cilCalculator,
+  cilChartPie,
+  cilCursor,
+  cilUser,
+  cilDescription,
+  cilDrop,
+  cilExternalLink,
+  cilAccountLogout,
+  cilNotes,
+  cilPencil,
+  cilPuzzle,
+  cilSpeedometer,
+  cilStar,
+} from '@coreui/icons'
 import { AppSidebarNav } from './AppSidebarNav'
 import { logo } from 'src/assets/brand/logo'
 import { sygnet } from 'src/assets/brand/sygnet'
 import navigation from '../_nav'
+import { useNavigate } from 'react-router-dom'
 
 import { setSidebarShow } from 'src/redux/slice/sidebarSlice'
 
 const AppSidebar = () => {
   const dispatch = useDispatch()
-
+  const navigate = useNavigate()
   // ✅ FIXED PATH
   const sidebarShow = useSelector((state) => state.ui.sidebarShow)
   const unfoldable = useSelector((state) => state.ui.sidebarUnfoldable)
@@ -32,7 +48,7 @@ const AppSidebar = () => {
       unfoldable={unfoldable}
       visible={sidebarShow}
       onVisibleChange={(visible) => {
-        dispatch(setSidebarShow(visible))   // ✅ FIXED
+        dispatch(setSidebarShow(visible)) // ✅ FIXED
       }}
     >
       <CSidebarHeader className="border-bottom">
@@ -44,21 +60,26 @@ const AppSidebar = () => {
         <CCloseButton
           className="d-lg-none"
           dark
-          onClick={() => dispatch(setSidebarShow(false))}  // ✅ FIXED
+          onClick={() => dispatch(setSidebarShow(false))} // ✅ FIXED
         />
       </CSidebarHeader>
 
       <AppSidebarNav items={navigation} />
 
-      <CSidebarFooter className="border-top d-none d-lg-flex">
-        <CSidebarToggler
-          onClick={() =>
-            dispatch({
-              type: 'set',
-              sidebarUnfoldable: !unfoldable,
-            })
-          }
-        />
+      <CSidebarFooter className="border-top d-flex justify-content-center p-2">
+        <div
+          style={{ cursor: 'pointer' }}
+          onClick={() => {
+            dispatch({ type: 'users/logout' })
+            localStorage.removeItem('token')
+            localStorage.removeItem('user')
+            navigate('/login', { replace: true })
+          }}
+          className="d-flex align-items-center gap-2 text-dark"
+        >
+          <CIcon icon={cilAccountLogout} />
+          <span>Logout</span>
+        </div>
       </CSidebarFooter>
     </CSidebar>
   )

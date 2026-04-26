@@ -3,16 +3,20 @@
   "WorkspaceRootPath": "C:\\NEXSERP\\ERPSoftifyApplication\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{35649425-4EB9-4CCC-B983-64079776742A}|ERPSoftifyApplication.InfrastructureLayer\\ERPSoftifyApplication.InfrastructureLayer.csproj|c:\\nexserp\\erpsoftifyapplication\\erpsoftifyapplication.infrastructurelayer\\repositories\\branchrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{35649425-4EB9-4CCC-B983-64079776742A}|ERPSoftifyApplication.InfrastructureLayer\\ERPSoftifyApplication.InfrastructureLayer.csproj|solutionrelative:erpsoftifyapplication.infrastructurelayer\\repositories\\branchrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{8A0BE9F3-4341-44E7-AFCE-D26F81CDB74E}|ERPSoftifyApplicatione.ApplicationLayer\\ERPSoftifyApplicatione.ApplicationLayer.csproj|c:\\nexserp\\erpsoftifyapplication\\erpsoftifyapplicatione.applicationlayer\\services\\branchservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{8A0BE9F3-4341-44E7-AFCE-D26F81CDB74E}|ERPSoftifyApplicatione.ApplicationLayer\\ERPSoftifyApplicatione.ApplicationLayer.csproj|solutionrelative:erpsoftifyapplicatione.applicationlayer\\services\\branchservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{962E4EE9-4D58-36E8-2F26-6E59178A6AA7}|ERPSoftifyApplication\\ERPSoftifyApplication.csproj|c:\\nexserp\\erpsoftifyapplication\\erpsoftifyapplication\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{962E4EE9-4D58-36E8-2F26-6E59178A6AA7}|ERPSoftifyApplication\\ERPSoftifyApplication.csproj|solutionrelative:erpsoftifyapplication\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{35649425-4EB9-4CCC-B983-64079776742A}|ERPSoftifyApplication.InfrastructureLayer\\ERPSoftifyApplication.InfrastructureLayer.csproj|c:\\nexserp\\erpsoftifyapplication\\erpsoftifyapplication.infrastructurelayer\\repositories\\branchrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{35649425-4EB9-4CCC-B983-64079776742A}|ERPSoftifyApplication.InfrastructureLayer\\ERPSoftifyApplication.InfrastructureLayer.csproj|solutionrelative:erpsoftifyapplication.infrastructurelayer\\repositories\\branchrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{962E4EE9-4D58-36E8-2F26-6E59178A6AA7}|ERPSoftifyApplication\\ERPSoftifyApplication.csproj|c:\\nexserp\\erpsoftifyapplication\\erpsoftifyapplication\\controllers\\branchcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{962E4EE9-4D58-36E8-2F26-6E59178A6AA7}|ERPSoftifyApplication\\ERPSoftifyApplication.csproj|solutionrelative:erpsoftifyapplication\\controllers\\branchcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{40A1C95C-2358-42B5-8F27-49865A21CCD2}|ERPSoftifyApplication.DomainLayer\\ERPSoftifyApplication.DomainLayer.csproj|c:\\nexserp\\erpsoftifyapplication\\erpsoftifyapplication.domainlayer\\entities\\branch.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{40A1C95C-2358-42B5-8F27-49865A21CCD2}|ERPSoftifyApplication.DomainLayer\\ERPSoftifyApplication.DomainLayer.csproj|solutionrelative:erpsoftifyapplication.domainlayer\\entities\\branch.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{35649425-4EB9-4CCC-B983-64079776742A}|ERPSoftifyApplication.InfrastructureLayer\\ERPSoftifyApplication.InfrastructureLayer.csproj|c:\\nexserp\\erpsoftifyapplication\\erpsoftifyapplication.infrastructurelayer\\datacontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -23,12 +27,16 @@
       "RelativeMoniker": "D:0:0:{962E4EE9-4D58-36E8-2F26-6E59178A6AA7}|ERPSoftifyApplication\\ERPSoftifyApplication.csproj|solutionrelative:erpsoftifyapplication\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{40A1C95C-2358-42B5-8F27-49865A21CCD2}|ERPSoftifyApplication.DomainLayer\\ERPSoftifyApplication.DomainLayer.csproj|c:\\nexserp\\erpsoftifyapplication\\erpsoftifyapplication.domainlayer\\entities\\companysetting.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{40A1C95C-2358-42B5-8F27-49865A21CCD2}|ERPSoftifyApplication.DomainLayer\\ERPSoftifyApplication.DomainLayer.csproj|solutionrelative:erpsoftifyapplication.domainlayer\\entities\\companysetting.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{35649425-4EB9-4CCC-B983-64079776742A}|ERPSoftifyApplication.InfrastructureLayer\\ERPSoftifyApplication.InfrastructureLayer.csproj|c:\\nexserp\\erpsoftifyapplication\\erpsoftifyapplication.infrastructurelayer\\repositories\\userrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{35649425-4EB9-4CCC-B983-64079776742A}|ERPSoftifyApplication.InfrastructureLayer\\ERPSoftifyApplication.InfrastructureLayer.csproj|solutionrelative:erpsoftifyapplication.infrastructurelayer\\repositories\\userrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{962E4EE9-4D58-36E8-2F26-6E59178A6AA7}|ERPSoftifyApplication\\ERPSoftifyApplication.csproj|c:\\nexserp\\erpsoftifyapplication\\erpsoftifyapplication\\controllers\\branchcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{962E4EE9-4D58-36E8-2F26-6E59178A6AA7}|ERPSoftifyApplication\\ERPSoftifyApplication.csproj|solutionrelative:erpsoftifyapplication\\controllers\\branchcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{962E4EE9-4D58-36E8-2F26-6E59178A6AA7}|ERPSoftifyApplication\\ERPSoftifyApplication.csproj|c:\\nexserp\\erpsoftifyapplication\\erpsoftifyapplication\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{962E4EE9-4D58-36E8-2F26-6E59178A6AA7}|ERPSoftifyApplication\\ERPSoftifyApplication.csproj|solutionrelative:erpsoftifyapplication\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{35649425-4EB9-4CCC-B983-64079776742A}|ERPSoftifyApplication.InfrastructureLayer\\ERPSoftifyApplication.InfrastructureLayer.csproj|c:\\nexserp\\erpsoftifyapplication\\erpsoftifyapplication.infrastructurelayer\\repositories\\companyrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -46,7 +54,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Bookmark",
@@ -57,83 +65,79 @@
               "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
             },
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Branch.cs",
+              "DocumentMoniker": "C:\\NEXSERP\\ERPSoftifyApplication\\ERPSoftifyApplication.DomainLayer\\Entities\\Branch.cs",
+              "RelativeDocumentMoniker": "ERPSoftifyApplication.DomainLayer\\Entities\\Branch.cs",
+              "ToolTip": "C:\\NEXSERP\\ERPSoftifyApplication\\ERPSoftifyApplication.DomainLayer\\Entities\\Branch.cs",
+              "RelativeToolTip": "ERPSoftifyApplication.DomainLayer\\Entities\\Branch.cs",
+              "ViewState": "AgIAABMAAAAAAAAAAAA8wB8AAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-26T16:37:03.393Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 6,
+              "Title": "CompanySetting.cs",
+              "DocumentMoniker": "C:\\NEXSERP\\ERPSoftifyApplication\\ERPSoftifyApplication.DomainLayer\\Entities\\CompanySetting.cs",
+              "RelativeDocumentMoniker": "ERPSoftifyApplication.DomainLayer\\Entities\\CompanySetting.cs",
+              "ToolTip": "C:\\NEXSERP\\ERPSoftifyApplication\\ERPSoftifyApplication.DomainLayer\\Entities\\CompanySetting.cs",
+              "RelativeToolTip": "ERPSoftifyApplication.DomainLayer\\Entities\\CompanySetting.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-26T16:25:02.179Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "BranchRepository.cs",
               "DocumentMoniker": "C:\\NEXSERP\\ERPSoftifyApplication\\ERPSoftifyApplication.InfrastructureLayer\\Repositories\\BranchRepository.cs",
               "RelativeDocumentMoniker": "ERPSoftifyApplication.InfrastructureLayer\\Repositories\\BranchRepository.cs",
               "ToolTip": "C:\\NEXSERP\\ERPSoftifyApplication\\ERPSoftifyApplication.InfrastructureLayer\\Repositories\\BranchRepository.cs",
               "RelativeToolTip": "ERPSoftifyApplication.InfrastructureLayer\\Repositories\\BranchRepository.cs",
-              "ViewState": "AgIAABMAAAAAAAAAAAAqwCMAAAAIAAAAAAAAAA==",
+              "ViewState": "AgIAACcAAAAAAAAAAAAwwEMAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-04-26T12:30:45.698Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "UserRepository.cs",
-              "DocumentMoniker": "C:\\NEXSERP\\ERPSoftifyApplication\\ERPSoftifyApplication.InfrastructureLayer\\Repositories\\UserRepository.cs",
-              "RelativeDocumentMoniker": "ERPSoftifyApplication.InfrastructureLayer\\Repositories\\UserRepository.cs",
-              "ToolTip": "C:\\NEXSERP\\ERPSoftifyApplication\\ERPSoftifyApplication.InfrastructureLayer\\Repositories\\UserRepository.cs",
-              "RelativeToolTip": "ERPSoftifyApplication.InfrastructureLayer\\Repositories\\UserRepository.cs",
-              "ViewState": "AgIAABoAAAAAAAAAAAAuwCIAAAAGAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-26T09:40:28.393Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "BranchController.cs",
-              "DocumentMoniker": "C:\\NEXSERP\\ERPSoftifyApplication\\ERPSoftifyApplication\\Controllers\\BranchController.cs",
-              "RelativeDocumentMoniker": "ERPSoftifyApplication\\Controllers\\BranchController.cs",
-              "ToolTip": "C:\\NEXSERP\\ERPSoftifyApplication\\ERPSoftifyApplication\\Controllers\\BranchController.cs",
-              "RelativeToolTip": "ERPSoftifyApplication\\Controllers\\BranchController.cs",
-              "ViewState": "AgIAABkAAAAAAAAAAAAlwCcAAAAMAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-26T09:12:12.644Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "BranchService.cs",
               "DocumentMoniker": "C:\\NEXSERP\\ERPSoftifyApplication\\ERPSoftifyApplicatione.ApplicationLayer\\Services\\BranchService.cs",
               "RelativeDocumentMoniker": "ERPSoftifyApplicatione.ApplicationLayer\\Services\\BranchService.cs",
               "ToolTip": "C:\\NEXSERP\\ERPSoftifyApplication\\ERPSoftifyApplicatione.ApplicationLayer\\Services\\BranchService.cs",
               "RelativeToolTip": "ERPSoftifyApplicatione.ApplicationLayer\\Services\\BranchService.cs",
-              "ViewState": "AgIAACwAAAAAAAAAAAAAADgAAAAIAAAAAAAAAA==",
+              "ViewState": "AgIAAHcAAAAAAAAAAADwv4IAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-04-26T09:12:12.668Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\NEXSERP\\ERPSoftifyApplication\\ERPSoftifyApplication\\Program.cs",
               "RelativeDocumentMoniker": "ERPSoftifyApplication\\Program.cs",
               "ToolTip": "C:\\NEXSERP\\ERPSoftifyApplication\\ERPSoftifyApplication\\Program.cs",
               "RelativeToolTip": "ERPSoftifyApplication\\Program.cs",
-              "ViewState": "AgIAAD4AAAAAAAAAAAAQwFkAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAD4AAAAAAAAAAAAQwEoAAAAnAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-04-26T08:59:13.395Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "DataContext.cs",
               "DocumentMoniker": "C:\\NEXSERP\\ERPSoftifyApplication\\ERPSoftifyApplication.InfrastructureLayer\\DataContext.cs",
               "RelativeDocumentMoniker": "ERPSoftifyApplication.InfrastructureLayer\\DataContext.cs",
               "ToolTip": "C:\\NEXSERP\\ERPSoftifyApplication\\ERPSoftifyApplication.InfrastructureLayer\\DataContext.cs",
               "RelativeToolTip": "ERPSoftifyApplication.InfrastructureLayer\\DataContext.cs",
-              "ViewState": "AgIAAC0AAAAAAAAAAAAAAC0AAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAADAAAAAAAAAAAAAAADUAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-04-26T08:50:57.237Z",
               "EditorCaption": ""
@@ -141,6 +145,32 @@
             {
               "$type": "Document",
               "DocumentIndex": 2,
+              "Title": "BranchController.cs",
+              "DocumentMoniker": "C:\\NEXSERP\\ERPSoftifyApplication\\ERPSoftifyApplication\\Controllers\\BranchController.cs",
+              "RelativeDocumentMoniker": "ERPSoftifyApplication\\Controllers\\BranchController.cs",
+              "ToolTip": "C:\\NEXSERP\\ERPSoftifyApplication\\ERPSoftifyApplication\\Controllers\\BranchController.cs",
+              "RelativeToolTip": "ERPSoftifyApplication\\Controllers\\BranchController.cs",
+              "ViewState": "AgIAACYAAAAAAAAAAAAswEEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-26T09:12:12.644Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "UserRepository.cs",
+              "DocumentMoniker": "C:\\NEXSERP\\ERPSoftifyApplication\\ERPSoftifyApplication.InfrastructureLayer\\Repositories\\UserRepository.cs",
+              "RelativeDocumentMoniker": "ERPSoftifyApplication.InfrastructureLayer\\Repositories\\UserRepository.cs",
+              "ToolTip": "C:\\NEXSERP\\ERPSoftifyApplication\\ERPSoftifyApplication.InfrastructureLayer\\Repositories\\UserRepository.cs",
+              "RelativeToolTip": "ERPSoftifyApplication.InfrastructureLayer\\Repositories\\UserRepository.cs",
+              "ViewState": "AgIAABoAAAAAAAAAAAAuwCIAAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-26T09:40:28.393Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
               "Title": "UserController.cs",
               "DocumentMoniker": "C:\\NEXSERP\\ERPSoftifyApplication\\ERPSoftifyApplication\\Controllers\\UserController.cs",
               "RelativeDocumentMoniker": "ERPSoftifyApplication\\Controllers\\UserController.cs",
@@ -148,12 +178,11 @@
               "RelativeToolTip": "ERPSoftifyApplication\\Controllers\\UserController.cs",
               "ViewState": "AgIAAB8AAAAAAAAAAAAAwCkAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-26T09:12:12.604Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-26T09:12:12.604Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 9,
               "Title": "CompanyRepository.cs",
               "DocumentMoniker": "C:\\NEXSERP\\ERPSoftifyApplication\\ERPSoftifyApplication.InfrastructureLayer\\Repositories\\CompanyRepository.cs",
               "RelativeDocumentMoniker": "ERPSoftifyApplication.InfrastructureLayer\\Repositories\\CompanyRepository.cs",
@@ -161,12 +190,11 @@
               "RelativeToolTip": "ERPSoftifyApplication.InfrastructureLayer\\Repositories\\CompanyRepository.cs",
               "ViewState": "AgIAACwAAAAAAAAAAAAYwEsAAAAsAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-26T12:30:32.481Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-26T12:30:32.481Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 10,
               "Title": "PermissionController.cs",
               "DocumentMoniker": "C:\\NEXSERP\\ERPSoftifyApplication\\ERPSoftifyApplication\\Controllers\\PermissionController.cs",
               "RelativeDocumentMoniker": "ERPSoftifyApplication\\Controllers\\PermissionController.cs",
@@ -174,8 +202,11 @@
               "RelativeToolTip": "ERPSoftifyApplication\\Controllers\\PermissionController.cs",
               "ViewState": "AgIAAAQAAAAAAAAAAAAYwBUAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-26T09:12:12.622Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-26T09:12:12.622Z"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
             }
           ]
         }

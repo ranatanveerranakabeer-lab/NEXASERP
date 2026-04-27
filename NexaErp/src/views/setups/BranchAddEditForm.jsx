@@ -47,10 +47,17 @@ function BranchAddEditForm({ visible, setVisible, form, branches }) {
     enableReinitialize: true,
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      if (values.id === 0) {
-        dispatch(createBranch(values))
+      // Yahan logic change ki hai:
+      // Agar parentBranchId khali ("") hai, to usay null set kar rahe hain
+      const finalValues = {
+        ...values,
+        parentBranchId: values.parentBranchId === '' ? null : parseInt(values.parentBranchId),
+      }
+
+      if (finalValues.id === 0) {
+        dispatch(createBranch(finalValues))
       } else {
-        dispatch(updateBranch(values))
+        dispatch(updateBranch(finalValues))
       }
       setVisible(false)
     },

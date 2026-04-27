@@ -1,4 +1,5 @@
 ﻿using ERPSoftifyApplication.DomainLayer.Entities;
+using ERPSoftifyApplication.DomainLayer.Interface;
 using ERPSoftifyApplicatione.ApplicationLayer.Interface;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
@@ -15,6 +16,7 @@ namespace ERPSoftifyApplication.InfrastructureLayer
             _currentUserService = currentUserService;
         }
         public int CurrentTenantId => _currentUserService.TenantId;
+        public int CurrentBranchId  => _currentUserService.BranchId;
 
         #region DbSets
         public DbSet<Product> Products { get; set; }
@@ -77,7 +79,22 @@ namespace ERPSoftifyApplication.InfrastructureLayer
 
                     modelBuilder.Entity(entityType.ClrType).HasQueryFilter(filter);
                 }
+                if (typeof(IMustHaveBranch).IsAssignableFrom(entityType.ClrType))
+                {
+                    var parameter = Expression.Parameter(entityType.ClrType, "e");
+                    var property = Expression.Property(parameter, nameof(IMustHaveBranch.BranchId));
+
+                    var filter = Expression.Lambda(
+                        Expression.Equal(
+                            property,
+                            Expression.Property(Expression.Constant(this), nameof(DataContext.CurrentBranchId))
+                        ),
+                        parameter
+                    );
+                    modelBuilder.Entity(entityType.ClrType).HasQueryFilter(filter);
+                }
             }
+
         }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
@@ -98,6 +115,17 @@ namespace ERPSoftifyApplication.InfrastructureLayer
                     case EntityState.Modified:
                         entry.Property(x => x.TenantId).IsModified = false;
                         break;
+                }
+            }
+            var branchEntries = ChangeTracker.Entries<IMustHaveBranch>();
+            foreach (var entry in branchEntries)
+            {
+                if (entry.State == EntityState.Added)
+                {
+                    if (entry.Entity.BranchId == 0)
+                    {
+                        entry.Entity.BranchId = CurrentBranchId;
+                    }
                 }
             }
             return base.SaveChangesAsync(cancellationToken);

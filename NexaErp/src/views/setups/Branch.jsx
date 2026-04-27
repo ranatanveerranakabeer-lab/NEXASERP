@@ -12,7 +12,8 @@ import {
   CTableDataCell,
   CBadge,
 } from '@coreui/react'
-import { Edit, Trash, CheckCircle, MapPin, Phone, Building2 } from 'lucide-react'
+// Hierarchy ko hata kar yahan Network ya GitGraph use kar sakte hain agar zaroorat ho
+import { Edit, Trash, CheckCircle, MapPin, Phone, Building2, Network } from 'lucide-react'
 import AppButton from '../../components/common/AppButton'
 import BranchAddEditForm from './BranchAddEditForm'
 import { getAllBranches, deleteBranch, setBranch } from '../../redux/slice/branchSlice'
@@ -68,7 +69,6 @@ function Branch() {
 
   return (
     <CContainer fluid className="px-4 mt-4">
-      {/* --- HEADER SECTION --- */}
       <div className="d-flex justify-content-between align-items-center mb-4">
         <div>
           <h3 className="fw-bold text-dark mb-0">{l('branch_directory') || 'Branch Directory'}</h3>
@@ -84,7 +84,6 @@ function Branch() {
         </div>
       </div>
 
-      {/* --- STACKED CARD TABLE --- */}
       <div className="branch-table-wrapper">
         <CTable responsive className="custom-card-table border-0">
           <CTableHead>
@@ -98,12 +97,11 @@ function Branch() {
           </CTableHead>
 
           <CTableBody>
-            <tr style={{ height: '15px' }}></tr> {/* Top Gap */}
+            <tr style={{ height: '15px' }}></tr>
             {branches.length > 0 ? (
               branches.map((t) => (
                 <React.Fragment key={t.id}>
                   <CTableRow className="data-card-row shadow-sm">
-                    {/* Branch Name & Manager */}
                     <CTableDataCell className="ps-4 py-3 first-cell">
                       <div className="d-flex align-items-center">
                         <div className="avatar-box me-3">
@@ -111,21 +109,33 @@ function Branch() {
                         </div>
                         <div>
                           <div className="fw-bold text-dark">{t.name}</div>
-                          <div className="text-muted extra-small">
-                            {t.contactPerson || l('no_manager')}
+                          <div className="d-flex align-items-center gap-2 mt-1">
+                            {t.parentBranchName ? (
+                              <CBadge
+                                color="info"
+                                className="extra-small fw-normal text-white bg-info opacity-75"
+                              >
+                                Sub of: {t.parentBranchName}
+                              </CBadge>
+                            ) : (
+                              <CBadge
+                                color="secondary"
+                                className="extra-small fw-normal bg-secondary-subtle text-secondary"
+                              >
+                                Main Branch
+                              </CBadge>
+                            )}
                           </div>
                         </div>
                       </div>
                     </CTableDataCell>
 
-                    {/* Branch Code */}
                     <CTableDataCell className="text-center">
                       <CBadge color="light" className="text-dark border px-3 py-2 fw-normal">
                         {t.code || '---'}
                       </CBadge>
                     </CTableDataCell>
 
-                    {/* City & Phone */}
                     <CTableDataCell>
                       <div className="d-flex flex-column gap-1">
                         <div
@@ -140,7 +150,6 @@ function Branch() {
                       </div>
                     </CTableDataCell>
 
-                    {/* Active Status */}
                     <CTableDataCell>
                       <CBadge
                         className={`px-3 py-2 rounded-pill ${t.isActive ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger'}`}
@@ -149,7 +158,6 @@ function Branch() {
                       </CBadge>
                     </CTableDataCell>
 
-                    {/* Action Buttons */}
                     <CTableDataCell className="text-end pe-4 last-cell">
                       <div className="d-flex justify-content-end gap-2">
                         <button
@@ -197,11 +205,9 @@ function Branch() {
         branches={branches}
       />
 
-      {/* --- CUSTOM STYLES --- */}
       <style>
         {`
           .custom-card-table { border-collapse: separate; border-spacing: 0; width: 100%; }
-          
           .header-card-row th {
             background: #fff !important;
             padding: 18px 15px;
@@ -212,40 +218,19 @@ function Branch() {
             font-weight: 700;
             border-bottom: 3px solid #7c3aed !important;
           }
-
-          .data-card-row {
-            background: white !important;
-            transition: all 0.3s ease;
-          }
-          
-          .data-card-row:hover {
-            transform: scale(1.005);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1) !important;
-            z-index: 10;
-          }
-
+          .data-card-row { background: white !important; transition: all 0.3s ease; }
+          .data-card-row:hover { transform: scale(1.005); box-shadow: 0 8px 20px rgba(0,0,0,0.1) !important; z-index: 10; }
           .first-cell { border-top-left-radius: 15px; border-bottom-left-radius: 15px; border: 1px solid #f0f0f0; border-right: 0; }
           .last-cell { border-top-right-radius: 15px; border-bottom-right-radius: 15px; border: 1px solid #f0f0f0; border-left: 0; }
           .data-card-row td { border-top: 1px solid #f0f0f0; border-bottom: 1px solid #f0f0f0; background: white; vertical-align: middle; }
-
-          .avatar-box {
-            width: 42px; height: 42px; 
-            background: #f3f0ff; color: #7c3aed;
-            display: flex; align-items: center; justify-content: center;
-            border-radius: 12px;
-          }
-
-          .action-btn {
-            border: none; background: transparent; padding: 10px; border-radius: 10px;
-            transition: all 0.2s; color: #adb5bd;
-          }
+          .avatar-box { width: 42px; height: 42px; background: #f3f0ff; color: #7c3aed; display: flex; align-items: center; justify-content: center; border-radius: 12px; }
+          .action-btn { border: none; background: transparent; padding: 10px; border-radius: 10px; transition: all 0.2s; color: #adb5bd; }
           .action-btn.select:hover { color: #7c3aed; background: #f3f0ff; }
           .action-btn.edit:hover { color: #212529; background: #f8f9fa; }
           .action-btn.delete:hover { color: #dc3545; background: #fff5f5; }
-
           .bg-success-subtle { background-color: #d1fae5 !important; color: #065f46 !important; }
           .bg-danger-subtle { background-color: #fee2e2 !important; color: #991b1b !important; }
-          .extra-small { font-size: 0.72rem; }
+          .extra-small { font-size: 0.65rem; padding: 2px 8px; }
         `}
       </style>
     </CContainer>

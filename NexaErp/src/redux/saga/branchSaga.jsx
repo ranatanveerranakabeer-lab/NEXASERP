@@ -7,6 +7,8 @@ import {
   deleteBranch,
   updateBranch,
   createBranchCompleted,
+  updateBranchCompleted,
+  deleteBranchCompleted,
   setIsLoading,
 } from '../slice/branchSlice'
 

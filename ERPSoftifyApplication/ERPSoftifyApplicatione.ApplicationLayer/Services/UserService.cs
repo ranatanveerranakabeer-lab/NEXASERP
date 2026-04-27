@@ -265,6 +265,7 @@ namespace ERPSoftifyApplicatione.ApplicationLayer.Services
                     Token = token,
                     TenantId = matchedUser.TenantId,
                     CompanyId = matchedUser.CompanyId,
+                    Branchd=matchedUser.BranchId,
                 };
 
                 return ResponseDataModel<LoginResponseDto>.SuccessResponse(response, "Login successful");
@@ -363,9 +364,9 @@ namespace ERPSoftifyApplicatione.ApplicationLayer.Services
         #region Get All Users
         public async Task<ResponseDataModel<List<UserDto>>> GetAllUsersAsync(CancellationToken cancellationToken)
         {
-            var currentTenantId = _currentUserService.TenantId;
+            
             var users = await _UserRepository.GetAllAsync(cancellationToken);
-            var filteredUsers = users.Where(u => u.TenantId == currentTenantId).ToList();
+            var filteredUsers = users.ToList();
 
             if (!filteredUsers.Any())
                 return ResponseDataModel<List<UserDto>>.SuccessResponse(new List<UserDto>());
